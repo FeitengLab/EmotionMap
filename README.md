@@ -1,56 +1,22 @@
 # EmotionMap 情绪地图
-Explore the emotion distribution with several different data sources in a global scale.
-探究全球尺度情绪分布
+Explore the emotion distribution with several different data sources in a global scale
 
-# Standard rules 标准和要求
-## Repository organization 项目组织 
-### DataCollection
+探究全球尺度情绪分布
+---
+## Standard rules 探究全球尺度情绪分布
+### Project structure 项目组织 
+#### 1. Data Collection  
 Including code files collect data from Flickr, Twitter, Weibo, Panorama photos.
-### EmotionDetection
+#### 2. Emotion Detection  
 Including code files detect emotion conditions from dataset.
-### SpatialAnalysis
+#### 3. Spatial Analysis  
 Including code files for spatial analysis.
 
-## Name rules 命名要求
-每个项目，函数，变量根据不同的功能进行命名，要求是尽量能够说明用途；项目名，变量名首个单词最好是名词，函数名首个单词最好是动词。
-python的项目名，函数名，变量名均为小写，单词之间使用下划线进行连接。
-例如：get_flickr_photos
-C#，MATLAB的项目名，函数名的单词首字母均为大写，单词之间无空格。
-例如：GetFlickrPhotos
-C#，MATLAB的变量名，整个变量名首字母为小写，其余单词首字母均为大写，单词之间无空格。
-例如：flickrPhotos
+### Requirements for pull requests PR要求
+#### Proper comment  合理注释
+Both English and Chinese comments are welcomed. You may refer to [Google style guide](https://google.github.io/styleguide/). 中英文注释皆可，注释风格参看[Google 风格指南](http://zh-google-styleguide.readthedocs.io/en/latest/）
 
-## 注释要求
-python最上方添加注释，包含字符编码，python版本，作者和功能叙述
-例如：
-	# coding: utf-8
-	
-	# version: python3.5
-	
-	# author: Yuhao Kang
-	
-	# function: functions
-
-C# using下方添加注释，包含作者和功能叙述
-例如：
-	// Author: Yuhao Kang
-	
-	// Function: Functions
-MATLAB首行添加注释，包含作者和功能叙述
-例如：
-	% Author: Yuhao Kang
-	% Function: Functions
-
-## 提交要求
-每个文件提交后需要在本文档中添加相应的条目，包含文件目录和文件功能叙述。
-
-# File organization 文档组织
-## DataCollection
-
-### get_flickr_photos
-
-#### get_flickr_photos.py
-用于获取Flickr照片
-
-## EmotionDetection
-## SpatialAnalysis
+#### Naming convention 命名要求
+1. For common project (program)  files, `lowercase_separated_by_underscores` are prefered.
+每个项目根据不同的用处进行命名，全部项目名称全部采用小写，单词间使用下划线进行连接.
+2. If your program involves a set of precedures, you may add a number at the beginning of your filename. 如果你有多个文件，涉及到运行顺序的问题，在文件前面加上序号是一个不错的选择。 命名示例：`flickr_get_photos`
