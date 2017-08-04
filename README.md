@@ -47,14 +47,9 @@ MATLAB首行添加注释，包含作者和功能叙述
 	% Function: Functions
 
 ## 提交要求
-<<<<<<< HEAD
-提交命名为 "author-date-time"
-例如："kyh-170804-1"
-每个文件提交后需要在本文档中添加相应的条目，包含文件目录和文件功能叙述。
-=======
+- 提交命名为 "author-date-time"
 - 每个文件提交后需要在本文档中添加相应的条目，包含文件目录和文件功能叙述。
 - 每个文件夹下可以附加说明文件，说明文件推荐命名为：`README.MD`。
->>>>>>> efc92440354993c361040dc8c0cb1d97f2fd4061
 
 # Document organization 文档组织
 ## Data Collection
