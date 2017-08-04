@@ -24,13 +24,17 @@ C#，MATLAB的变量名，整个变量名首字母为小写，其余单词首字
 python最上方添加注释，包含字符编码，python版本，作者和功能叙述
 例如：
 	# coding: utf-8
+	
 	# version: python3.5
+	
 	# author: Yuhao Kang
+	
 	# function: functions
 
 C# using下方添加注释，包含作者和功能叙述
 例如：
 	// Author: Yuhao Kang
+	
 	// Function: Functions
 MATLAB首行添加注释，包含作者和功能叙述
 例如：
@@ -39,3 +43,14 @@ MATLAB首行添加注释，包含作者和功能叙述
 
 ## 提交要求
 每个文件提交后需要在本文档中添加相应的条目，包含文件目录和文件功能叙述。
+
+# File organization 文档组织
+## DataCollection
+
+### get_flickr_photos
+
+#### get_flickr_photos.py
+用于获取Flickr照片
+
+## EmotionDetection
+## SpatialAnalysis
