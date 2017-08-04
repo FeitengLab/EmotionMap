@@ -20,6 +20,8 @@ Including code files for spatial analysis.
 例如：`GetFlickrPhotos`
 - C#，MATLAB的变量名，整个变量名首字母为小写，其余单词首字母均为大写，单词之间无空格。  
 例如：`flickrPhotos`
+- SQL语句所有SQL语法单词均大写，具体的变量名均小写。
+例如：SELECT * FROM table_name WHERE id = 1;
 
 ## Commenting instructions 注释要求
 python最上方添加注释，包含字符编码，python版本，作者和功能叙述  
@@ -33,7 +35,7 @@ python最上方添加注释，包含字符编码，python版本，作者和功�
 	
 	# function: functions
 
-C# using下方添加注释，包含作者和功能叙述  
+C#在using下方添加注释，包含作者和功能叙述  
 例如：
 
 	// Author: Yuhao Kang
@@ -45,9 +47,17 @@ MATLAB首行添加注释，包含作者和功能叙述
 	% Author: Yuhao Kang
 
 	% Function: Functions
+	
+SQL首行添加注释，包含作者和功能叙述
+例如：
+
+	/* Author: Yuhao Kang
+	
+	Function: Functions */
 
 ## 提交要求
-- 提交命名为 "author-date-time"
+- 提交命名为 "author-date-time"。
+例如：'kyh-170804-1'
 - 每个文件提交后需要在本文档中添加相应的条目，包含文件目录和文件功能叙述。
 - 每个文件夹下可以附加说明文件，说明文件推荐命名为：`README.MD`。
 
@@ -57,7 +67,7 @@ MATLAB首行添加注释，包含作者和功能叙述
 ### get_flickr_photos
 
 #### get_flickr_photos.py
-用于获取Flickr照片
+- 用于获取Flickr照片
 
 ## Emotion Detection
 ## Spatial Analysis
