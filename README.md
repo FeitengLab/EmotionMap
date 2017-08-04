@@ -1,14 +1,14 @@
 # EmotionMap 情绪地图
-Explore the emotion distribution with several different data sources in a global scale.
+Explore the emotion distribution with several different data sources in a global scale.  
 探究全球尺度情绪分布
 
 # Standard rules 标准和要求
 ## Repository organization 项目组织 
-### DataCollection
+### Data Collection
 Including code files collect data from Flickr, Twitter, Weibo, Panorama photos.
-### EmotionDetection
+### Emotion Detection
 Including code files detect emotion conditions from dataset.
-### SpatialAnalysis
+### Spatial Analysis
 Including code files for spatial analysis.
 
 ## Naming convention 命名要求
