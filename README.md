@@ -77,7 +77,7 @@ Mapping the Sensitivity of the Public Emotion to the Movement of Stock Market Va
 
 #### get_flickr_photos
 
-- ##### get_flickr_photos.py
+- ##### get_flickr_photos.py  
 用于获取Flickr照片
 
 ### Emotion Detection
