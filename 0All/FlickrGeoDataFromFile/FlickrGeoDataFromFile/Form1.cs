@@ -61,14 +61,14 @@ namespace FlickrGeoDataFromFile
             //导出文件
             exportPath = string.Format("{0}\\{1}.csv", flickrDataFolder, tbxExportFlickrDataName.Text);
 
+            tbxStatus.Text += "开始读取文件!\n";
             using (StreamWriter flickrStreamWriter = new StreamWriter(exportPath))
             {
-                for (int i = 0; i < 2; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     if (i <= 5)
                     {
                         flickrDataCSV = string.Format("{0}\\yfcc100m_dataset-{1}-x.csv", flickrDataFolder, i);
-                        tbxStatus.Text += string.Format("开始读取文件:{0}", flickrDataCSV);
                         ExtractPtsInBoundary(flickrStreamWriter);
                     }
                     else
@@ -76,7 +76,6 @@ namespace FlickrGeoDataFromFile
                         for (int j = 0; j < 5; j++)
                         {
                             flickrDataCSV = string.Format("{0}\\yfcc100m_dataset-{1}-x-{2}.csv", flickrDataFolder, i, j);
-                            tbxStatus.Text += string.Format("开始读取文件:{0}", flickrDataCSV);
                             ExtractPtsInBoundary(flickrStreamWriter);
                         }
                     }

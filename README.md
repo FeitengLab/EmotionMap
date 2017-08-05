@@ -58,8 +58,18 @@ SQL首行添加注释，包含作者和功能叙述
 
 ## 0All
 Common projects
+### Flickr数据文件  
+百度云盘：链接：http://pan.baidu.com/s/1qXGmuRy 密码：m7qh  其中的27个CSV文件
 ### FlickrGeoDataFromFile  
-将相应矩形区域内的Flickr数据导出为csv
+将相应矩形区域内的Flickr数据导出为csv  
+用法：
+- 打开exe文件。  
+- 导入Flickr数据文件：选择任意Flickr数据文件即可，系统会自动获取文件夹名称。  
+例如：E:\BaiduNetdiskDownload\Flicker_geotag_library\AWS\yfcc100m_dataset-0-x.csv  
+- 分别输入地理方位最大最小经纬度范围，凡是该范围内的Flickr数据都会被提取出来。  
+- 导出文件名。导出文件会在Flickr数据文件夹下，故只需要输入文件名即可（非路径）。  
+导出格式为csv文件，每一行内容已经统一了格式，可以直接导入数据库。  
+例如：beijing  
 
 ## 1SiteRanking
 A Ranking of Tourist Attractions based on the Facial Expressions.
