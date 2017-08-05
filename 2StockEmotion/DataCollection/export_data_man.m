@@ -1,10 +1,10 @@
 % Author: Yuhao Kang
-% Function: Export data
-% 修改文件路径,导入情绪数据.
+% Function: Export Manhattan data
+% 修改文件路径,导入曼哈顿情绪数据.
 % 将数据导出为.mat格式文件.
 %% Read data from excel
-xls_data_1=xlsread('Data.xlsx',1);
-xls_data_2=xlsread('Data.xlsx',2);
+xls_data_1=xlsread('Data_Man.xlsx',1);
+xls_data_2=xlsread('Data_Man.xlsx',2);
 %% Emotion
 month=xls_data_1(:,12);
 day=xls_data_1(:,13);

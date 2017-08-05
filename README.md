@@ -88,11 +88,19 @@ A Ranking of Tourist Attractions based on the Facial Expressions.
 ## 2StockEmotion
 Mapping the Sensitivity of the Public Emotion to the Movement of Stock Market Value.
 ### Data Collection
+#### Manhattan  
+纽约曼哈顿地区相关代码
+- ##### compute_correlation.m  
+计算股票与情绪之间的相关性
+- ##### comute_emotion_avg.m  
+计算情绪各月平均值和方程
+- ##### emotion_data_manhattan.mat  
+曼哈顿区域的数据，包括情绪值，股票值
+- ##### export_data.m  
+将excel文件中曼哈顿区域的数据导出为.mat文件格式
+- ##### pca_emotion.m  
+对曼哈顿地区情绪数据进行主成分分析
 
-#### get_flickr_photos
-
-- ##### get_flickr_photos.py  
-用于获取Flickr照片
 
 ### Emotion Detection
 ### Spatial Analysis

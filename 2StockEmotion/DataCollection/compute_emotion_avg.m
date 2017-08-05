@@ -1,5 +1,5 @@
 % Author: Yuhao Kang
-% Function: 计算月平均情绪值
+% Function: 计算月平均情绪值 曼哈顿
 % 修改文件路径,导入情绪数据 emotion_data.mat.
 %% Read data from excel
 load emotion_data_manhattan.mat;
