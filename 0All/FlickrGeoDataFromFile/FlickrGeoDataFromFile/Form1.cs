@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
@@ -18,7 +19,7 @@ namespace FlickrGeoDataFromFile
 {
     public partial class Form1 : Form
     {
-        double maxLat, maxLon, minLat, minLon;
+        List<Region> regionList = new List<Region>();//所有的矩形区域集合
         string importPath, exportPath, flickrDataFolder, flickrDataCSV;
 
         public Form1()
@@ -50,108 +51,189 @@ namespace FlickrGeoDataFromFile
             }
         }
 
-        private void btnExportFlickrData_Click(object sender, EventArgs e)
+        private void btnImportRegion_Click(object sender, EventArgs e)
         {
-            tbxStatus.Text = "";
-            //地理范围
-            maxLat = Convert.ToDouble(tbxMaxLat.Text);
-            minLat = Convert.ToDouble(tbxMinLat.Text);
-            maxLon = Convert.ToDouble(tbxMaxLon.Text);
-            minLon = Convert.ToDouble(tbxMinLon.Text);
-            //导出文件
-            exportPath = string.Format("{0}\\{1}.csv", flickrDataFolder, tbxExportFlickrDataName.Text);
-
-            tbxStatus.Text += "开始读取文件!\n";
-            using (StreamWriter flickrStreamWriter = new StreamWriter(exportPath))
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.CheckFileExists = true;
+            openFileDialog.Title = "打开CSV";
+            openFileDialog.Filter = "CSV(*.csv)|*.csv;|所有文件(*.*)|*.*";
+            openFileDialog.Multiselect = false;
+            openFileDialog.RestoreDirectory = true;
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                for (int i = 0; i < 10; i++)
+                try
                 {
-                    if (i <= 5)
+                    using (StreamReader streamReader = new StreamReader(openFileDialog.FileName))
                     {
-                        flickrDataCSV = string.Format("{0}\\yfcc100m_dataset-{1}-x.csv", flickrDataFolder, i);
-                        ExtractPtsInBoundary(flickrStreamWriter);
-                    }
-                    else
-                    {
-                        for (int j = 0; j < 5; j++)
+                        //获取区域表详细信息
+                        string line = streamReader.ReadLine();
+                        while (line != null)
                         {
-                            flickrDataCSV = string.Format("{0}\\yfcc100m_dataset-{1}-x-{2}.csv", flickrDataFolder, i, j);
-                            ExtractPtsInBoundary(flickrStreamWriter);
+                            Region region = new Region(Convert.ToDouble(line.Split(',')[0]), Convert.ToDouble(line.Split(',')[1]), Convert.ToDouble(line.Split(',')[2]), Convert.ToDouble(line.Split(',')[3]), line.Split(',')[4]);
+                            region.CreateStreamWriter(String.Format("{0}\\{1}.csv", flickrDataFolder, region.name));
+                            regionList.Add(region);
+                            line = streamReader.ReadLine();
                         }
+                    }
+                    tbxStatus.Text += "导入区域情况完毕!\n";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+            }
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            //读取所有的Flickr数据
+            for (int i = 0; i < 10; i++)
+            {
+                if (i <= 5)
+                {
+                    flickrDataCSV = string.Format("{0}\\yfcc100m_dataset-{1}-x.csv", flickrDataFolder, i);
+                    ExtractPts(new StreamReader(flickrDataCSV));
+                }
+                else
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        flickrDataCSV = string.Format("{0}\\yfcc100m_dataset-{1}-x-{2}.csv", flickrDataFolder, i, j);
+                        ExtractPts(new StreamReader(flickrDataCSV));
                     }
                 }
             }
             tbxStatus.Text += "导出完毕!";
         }
 
+
+
         /// <summary>
         /// 获取在区域范围内的点
         /// </summary>
         /// <param name="streamWriter"></param>
-        private void ExtractPtsInBoundary(StreamWriter streamWriter)
+        private void ExtractPts(StreamReader streamReader)
         {
-            using (StreamReader flickrStreamReader = new StreamReader(flickrDataCSV))
+            try
             {
-                string flickrDataLine = flickrStreamReader.ReadLine();
+                //读取Flickr数据
+                string flickrDataLine = streamReader.ReadLine();
                 while (flickrDataLine != null)
                 {
+                    //读取一行Flickr数据并进行处理
                     FlickrData flickrData = new FlickrData(flickrDataLine);
-                    if (IsInBoundary(flickrData.longitude, flickrData.latitude))
+                    foreach (Region region in regionList)
                     {
-                        //如果点在范围内则写入文件
-                        streamWriter.WriteLine(flickrData.FlickrDataWrite());
+                        //判断是否在区域内
+                        if (region.IsInBoundary(flickrData.longitude, flickrData.latitude))
+                        {
+                            //如果在区域内则写入文件
+                            region.WritePts(flickrData);
+                        }
                     }
-                    flickrDataLine = flickrStreamReader.ReadLine();
+                    flickrDataLine = streamReader.ReadLine();
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
             }
         }
 
         /// <summary>
-        /// 判断是否在区域内,如果传入的点在区域内,则返回True,否则返回False
+        /// 从数据表中读取出Flickr数据
         /// </summary>
-        /// <param name="lon"></param>
-        /// <param name="lat"></param>
-        /// <returns></returns>
-        public bool IsInBoundary(double lon, double lat)
+        public class FlickrData
         {
-            if (lon >= minLon && lon <= maxLon)
+            long photoId, photoUploadTime;
+            string userid, photoTakeTime, photoTitle, photoDescription, photoGeotag, url;
+            public double longitude { get; }
+            public double latitude { get; }
+            int accuracy;
+            string flickrDataLine;
+
+            public FlickrData(string flickrDataLine)
             {
-                if (lat >= minLat && lat <= maxLat)
+                this.flickrDataLine = flickrDataLine;
+                //从文件中读取出Flickr数据并分配给相应的对象
+                photoId = Convert.ToInt64(flickrDataLine.Split('\t')[0]);
+                userid = Convert.ToString(flickrDataLine.Split('\t')[1]);
+                photoTakeTime = Convert.ToString(flickrDataLine.Split('\t')[2]);
+                photoUploadTime = Convert.ToInt64(flickrDataLine.Split('\t')[3]);
+                photoTitle = Convert.ToString(flickrDataLine.Split('\t')[4]);
+                photoDescription = Convert.ToString(flickrDataLine.Split('\t')[5]);
+                photoGeotag = Convert.ToString(flickrDataLine.Split('\t')[6]);
+                longitude = Convert.ToDouble(flickrDataLine.Split('\t')[7]);
+                latitude = Convert.ToDouble(flickrDataLine.Split('\t')[8]);
+                accuracy = Convert.ToInt32(flickrDataLine.Split('\t')[9]);
+                url = Convert.ToString(flickrDataLine.Split('\t')[10]);
+            }
+            public string FlickrDataWrite()
+            {
+                return flickrDataLine;
+            }
+        }
+
+        /// <summary>
+        /// 从区域表中读取出各个区域的情况
+        /// </summary>
+        public class Region
+        {
+            public double maxLon { get; }
+            public double maxLat { get; }
+            public double minLon { get; }
+            public double minLat { get; }
+            public string name { get; }
+            private StreamWriter streamWriter;
+
+            public Region(double maxLat, double minLon, double minLat, double maxLon, string name)
+            {
+                this.maxLat = maxLat;
+                this.minLon = minLon;
+                this.minLat = minLat;
+                this.maxLon = maxLon;
+                this.name = name;
+            }
+
+            /// <summary>
+            /// 创建写入流
+            /// </summary>
+            /// <param name="path"></param>
+            public void CreateStreamWriter(string path)
+            {
+                streamWriter = new StreamWriter(path);
+            }
+
+            /// <summary>
+            /// 判断是否在区域内,如果传入的点在区域内,则返回True,否则返回False
+            /// </summary>
+            /// <param name="lon"></param>
+            /// <param name="lat"></param>
+            /// <returns></returns>
+            public bool IsInBoundary(double lon, double lat)
+            {
+                if (lon >= minLon && lon <= maxLon)
                 {
+                    if (lat >= minLat && lat <= maxLat)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            public bool WritePts(FlickrData flickrData)
+            {
+                try
+                {
+                    streamWriter.WriteLine(flickrData.FlickrDataWrite());
                     return true;
                 }
+                catch (Exception ex)
+                {
+                    return false;
+                }
             }
-            return false;
-        }
-    }
-    public class FlickrData
-    {
-        long photoId, photoUploadTime;
-        string userid, photoTakeTime, photoTitle, photoDescription, photoGeotag, url;
-        public double longitude { get; }
-        public double latitude { get; }
-        int accuracy;
-        string flickrDataLine;
-
-        public FlickrData(string flickrDataLine)
-        {
-            this.flickrDataLine = flickrDataLine;
-            //从文件中读取出Flickr数据并分配给相应的对象
-            photoId = Convert.ToInt64(flickrDataLine.Split('\t')[0]);
-            userid = Convert.ToString(flickrDataLine.Split('\t')[1]);
-            photoTakeTime = Convert.ToString(flickrDataLine.Split('\t')[2]);
-            photoUploadTime = Convert.ToInt64(flickrDataLine.Split('\t')[3]);
-            photoTitle = Convert.ToString(flickrDataLine.Split('\t')[4]);
-            photoDescription = Convert.ToString(flickrDataLine.Split('\t')[5]);
-            photoGeotag = Convert.ToString(flickrDataLine.Split('\t')[6]);
-            longitude = Convert.ToDouble(flickrDataLine.Split('\t')[7]);
-            latitude = Convert.ToDouble(flickrDataLine.Split('\t')[8]);
-            accuracy = Convert.ToInt32(flickrDataLine.Split('\t')[9]);
-            url = Convert.ToString(flickrDataLine.Split('\t')[10]);
-        }
-        public string FlickrDataWrite()
-        {
-            return flickrDataLine;
         }
     }
 }
