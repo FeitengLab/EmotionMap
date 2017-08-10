@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Timers;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Windows.Forms;
 
 /// <Author>
@@ -11,9 +11,9 @@ using System.Windows.Forms;
 /// Import Flickr data from all csv files with geotag.
 /// Extract points within the selecting boundary.
 /// Export the particular points.
-/// 打开任意一个Flickr的csv文件。软件将读取文件夹名,之后按照先前的顺序依次遍历所有的csv文件。
-/// 根据输入的几何范围,搜索所有范围内的点并提取出来,再写入csv文件。
-/// 文件名需手动输入。
+/// 打开任意一个Flickr的csv文件。软件将读取文件夹名,在之后的操作中将按照先前的顺序依次遍历所有的csv文件。
+/// 打开区域范围的csv文件,获取所有的区域。
+/// 依次遍历所有Flickr数据,并与区域范围进行比较,提取出范围内的点并写入csv文件.
 /// </Function>
 namespace FlickrGeoDataFromFile
 {
@@ -46,7 +46,7 @@ namespace FlickrGeoDataFromFile
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                    ErrorSolve(ex);
                 }
             }
         }
@@ -79,7 +79,7 @@ namespace FlickrGeoDataFromFile
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                    ErrorSolve(ex);
                 }
             }
         }
@@ -136,10 +136,23 @@ namespace FlickrGeoDataFromFile
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                ErrorSolve(ex);
             }
         }
 
+        /// <summary>
+        /// 处理错误信息
+        /// </summary>
+        /// <param name="ex"></param>
+        public void ErrorSolve(Exception ex)
+        {
+            //MessageBox.Show(ex.ToString());
+            using (StreamWriter sw = new StreamWriter(String.Format("{0}\\log.txt", flickrDataFolder)))
+            {
+
+                sw.WriteLine(String.Format("{0}:{1}\n", DateTime.Now.ToString(), ex.ToString());
+            }
+        }
         /// <summary>
         /// 从数据表中读取出Flickr数据
         /// </summary>
@@ -231,6 +244,7 @@ namespace FlickrGeoDataFromFile
                 }
                 catch (Exception ex)
                 {
+                    MessageBox.Show(ex.ToString());
                     return false;
                 }
             }
