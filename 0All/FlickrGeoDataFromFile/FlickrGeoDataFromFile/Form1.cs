@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Timers;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -106,8 +105,6 @@ namespace FlickrGeoDataFromFile
             tbxStatus.Text += "导出完毕!";
         }
 
-
-
         /// <summary>
         /// 获取在区域范围内的点
         /// </summary>
@@ -153,6 +150,7 @@ namespace FlickrGeoDataFromFile
                 sw.WriteLine(String.Format("{0}:{1}\n", DateTime.Now.ToString(), ex.ToString());
             }
         }
+
         /// <summary>
         /// 从数据表中读取出Flickr数据
         /// </summary>
@@ -235,6 +233,11 @@ namespace FlickrGeoDataFromFile
                 return false;
             }
 
+            /// <summary>
+            /// 写入文件
+            /// </summary>
+            /// <param name="flickrData"></param>
+            /// <returns></returns>
             public bool WritePts(FlickrData flickrData)
             {
                 try
