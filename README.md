@@ -7,7 +7,8 @@ Explore the emotion distribution with several different data sources in a global
 ## Naming convention 命名要求
 - 每个项目，函数，变量根据不同的功能进行命名，要求是尽量能够说明用途
 - 项目名，变量名首个单词最好是名词，函数名首个单词最好是动词
-- Python的项目名，函数名，变量名均为小写，单词之间使用下划线进行连接。  
+- Python的项目名，函数名，变量名均为小写，单词之间使用下划线进行连接
+- 涉及到与步骤相关比较强的多个文件的使用，可以在文件名前添加数字表示运行顺序
 例如：`get_flickr_photos`
 - C#，MATLAB的项目名，函数名的单词首字母均为大写，单词之间无空格。  
 例如：`GetFlickrPhotos`
@@ -59,7 +60,7 @@ SQL首行添加注释，包含作者和功能叙述
 ## 0All
 Common projects
 ### Flickr数据文件  
-百度云盘：链接：http://pan.baidu.com/s/1qXGmuRy 密码：m7qh  其中的27个CSV文件
+百度云盘[链接](http://pan.baidu.com/s/1qXGmuRy) 密码：m7qh  其中的27个CSV文件
 ### FlickrGeoDataFromFile  
 将相应矩形区域内的Flickr数据导出为csv  
 用法：
@@ -77,7 +78,7 @@ A Ranking of Tourist Attractions based on the Facial Expressions.
 
 #### get_flickr_photos
 
-- ##### get_flickr_photos.py
+##### get_flickr_photos.py
 用于获取Flickr照片
 
 ### Emotion Detection
@@ -87,7 +88,17 @@ A Ranking of Tourist Attractions based on the Facial Expressions.
 
 ## 2StockEmotion
 Mapping the Sensitivity of the Public Emotion to the Movement of Stock Market Value.
-- #### manhattan_workflow.m    
+### √ Workflow 1 (MATLAB)
+#### √ manhattan_workflow.m
 计算曼哈顿地区股票与情绪之间相关性的完整工作流：导入数据，主成分分析，导出数据，标准化，相关性分析   
-- #### manhattan_workflow.m   
+#### √ manhattan_workflow.m
 计算伦敦和东京股票与情绪之间相关性的完整工作流
+### Workflow 2 (Python, Jupyter Notebook)
+#### × 带数字的文件
+- × 输入文件为从数据库直接导出的情绪数据文件和各股票文件（待改进：文件命名需要替换的地方多，需要导出为Python，暴露统一接口）
+- 1，2，3，4 开头的文件为程序运行顺序，相同代表可以一起运行。其中2为可视化检查，可以运行一次，也可以不运行。
+#### × 不带数字的文件（顺便写的辅助文件）
+- √ [三个交易所股票关系.ipynb](2StockEmotion/三个交易所股票关系.ipynb):
+绘制NASDAQ、N225、FTSE100三个文件。
+- × [数据按照月份导出csv.ipynb](2StockEmotion/数据按照月份导出csv.ipynb):
+将数据按照自己要求导出的模板文件，可以按照自己的意愿将需要的数据导出为csv。
