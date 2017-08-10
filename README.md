@@ -101,4 +101,4 @@ Mapping the Sensitivity of the Public Emotion to the Movement of Stock Market Va
 - √ [三个交易所股票关系.ipynb](2StockEmotion/三个交易所股票关系.ipynb):
 绘制NASDAQ、N225、FTSE100三个文件。
 - × [数据按照月份导出csv.ipynb](2StockEmotion/数据按照月份导出csv.ipynb):
-将数据按照自己要求导出的模板文件，可以按照自己的意愿将需要的数据导出为csv。
+将数据按照自己要求导出的模板文件，可以按照自己的意愿将需要的数据导出为csv。(改进：函数化）
