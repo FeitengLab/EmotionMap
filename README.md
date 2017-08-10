@@ -93,7 +93,7 @@ Mapping the Sensitivity of the Public Emotion to the Movement of Stock Market Va
 计算曼哈顿地区股票与情绪之间相关性的完整工作流：导入数据，主成分分析，导出数据，标准化，相关性分析   
 #### √ manhattan_workflow.m
 计算伦敦和东京股票与情绪之间相关性的完整工作流
-### Workflow 2 (Python, Jupyter Notebook)
+### × Workflow 2 (Python, Jupyter Notebook)
 #### × 带数字的文件
 - × 输入文件为从数据库直接导出的情绪数据文件和各股票文件（待改进：文件命名需要替换的地方多，需要导出为Python，暴露统一接口）
 - 1，2，3，4 开头的文件为程序运行顺序，相同代表可以一起运行。其中2为可视化检查，可以运行一次，也可以不运行。
@@ -101,4 +101,4 @@ Mapping the Sensitivity of the Public Emotion to the Movement of Stock Market Va
 - √ [三个交易所股票关系.ipynb](2StockEmotion/三个交易所股票关系.ipynb):
 绘制NASDAQ、N225、FTSE100三个文件。
 - × [数据按照月份导出csv.ipynb](2StockEmotion/数据按照月份导出csv.ipynb):
-将数据按照自己要求导出的模板文件，可以按照自己的意愿将需要的数据导出为csv。
+将数据按照自己要求导出的模板文件，可以按照自己的意愿将需要的数据导出为csv。(待改进：函数化）

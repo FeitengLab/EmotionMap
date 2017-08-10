@@ -1,9 +1,0 @@
-E:\Users\KYH\Documents\GitHub\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\bin\Debug\FlickrGeoDataFromFile.exe.config
-E:\Users\KYH\Documents\GitHub\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\bin\Debug\FlickrGeoDataFromFile.exe
-E:\Users\KYH\Documents\GitHub\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\bin\Debug\FlickrGeoDataFromFile.pdb
-E:\Users\KYH\Documents\GitHub\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.csprojResolveAssemblyReference.cache
-E:\Users\KYH\Documents\GitHub\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.Form1.resources
-E:\Users\KYH\Documents\GitHub\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.Properties.Resources.resources
-E:\Users\KYH\Documents\GitHub\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.csproj.GenerateResource.Cache
-E:\Users\KYH\Documents\GitHub\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.exe
-E:\Users\KYH\Documents\GitHub\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.pdb
