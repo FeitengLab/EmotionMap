@@ -73,6 +73,7 @@ namespace FlickrGeoDataFromFile
                             regionList.Add(region);
                             line = streamReader.ReadLine();
                         }
+                        tbxImportRegion.Text = openFileDialog.FileName;
                     }
                     tbxStatus.Text += "导入区域情况完毕!\n";
                 }
@@ -130,6 +131,7 @@ namespace FlickrGeoDataFromFile
                     }
                     flickrDataLine = streamReader.ReadLine();
                 }
+                streamReader.Close();
             }
             catch (Exception ex)
             {
@@ -146,8 +148,7 @@ namespace FlickrGeoDataFromFile
             //MessageBox.Show(ex.ToString());
             using (StreamWriter sw = new StreamWriter(String.Format("{0}\\log.txt", flickrDataFolder)))
             {
-
-                sw.WriteLine(String.Format("{0}:{1}\n", DateTime.Now.ToString(), ex.ToString());
+                sw.WriteLine(String.Format("{0}:{1}\n", DateTime.Now.ToString(), ex.ToString()));
             }
         }
 
