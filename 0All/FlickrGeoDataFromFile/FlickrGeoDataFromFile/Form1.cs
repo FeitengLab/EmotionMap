@@ -40,7 +40,7 @@ namespace FlickrGeoDataFromFile
                 {
                     //获取Flickr数据文件路径
                     flickrDataFolder = openFileDialog.FileName.Substring(0, openFileDialog.FileName.LastIndexOf('\\'));
-                    flickrDataCSV = string.Format("{0}\\yfcc100m_dataset-0-x.csv", flickrDataFolder);
+                    flickrDataCSV = string.Format("{0}\\0.csv", flickrDataFolder);
                     tbxImportFlickrDataPath.Text = flickrDataCSV;
                 }
                 catch (Exception ex)
@@ -87,21 +87,10 @@ namespace FlickrGeoDataFromFile
         private void btnOK_Click(object sender, EventArgs e)
         {
             //读取所有的Flickr数据
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i <= 25; i++)
             {
-                if (i <= 5)
-                {
-                    flickrDataCSV = string.Format("{0}\\yfcc100m_dataset-{1}-x.csv", flickrDataFolder, i);
-                    ExtractPts(new StreamReader(flickrDataCSV));
-                }
-                else
-                {
-                    for (int j = 0; j < 5; j++)
-                    {
-                        flickrDataCSV = string.Format("{0}\\yfcc100m_dataset-{1}-x-{2}.csv", flickrDataFolder, i, j);
-                        ExtractPts(new StreamReader(flickrDataCSV));
-                    }
-                }
+                flickrDataCSV = string.Format("{0}\\{1}.csv", flickrDataFolder, i);
+                ExtractPts(new StreamReader(flickrDataCSV));
             }
             tbxStatus.Text += "导出完毕!";
         }
