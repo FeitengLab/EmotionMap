@@ -50,27 +50,30 @@ SQL首行添加注释，包含作者和功能叙述
 	Function: Functions */
 
 ## Committing rules 提交要求
-- 提交命名为 "author-date-time"。  
-例如：'kyh-170804-1'
+- 提交命名为 "author-date-time(-describe)",其中dexcribe为英文简单描述。  
+例如：'kyh-170804-1-Create Files'
 - 每个文件提交后需要在本文档中添加相应的条目，包含文件目录和文件功能叙述。
 - 每个文件夹下可以附加说明文件，说明文件推荐命名为：`README.MD`。
 
 # Document organization 文档组织
 
 ## 0All
-Common projects
+Common projects  共有代码
 ### Flickr数据文件  
-百度云盘[链接](http://pan.baidu.com/s/1qXGmuRy) 密码：m7qh  其中的27个CSV文件
+百度云盘[链接](http://pan.baidu.com/s/1qXGmuRy) 密码：m7qh    
+AWS文件夹下为10个源数据CSV文件（共1亿条数据）  
+geotag文件夹下为带有地理坐标数据的CSV文件（共约4600万条数据）
+### batch_rename.py
+重命名文件夹下所有的文件名  
 ### FlickrGeoDataFromFile  
 将相应矩形区域内的Flickr数据导出为csv  
 用法：
 - 打开exe文件。  
-- 导入Flickr数据文件：选择任意Flickr数据文件即可，系统会自动获取文件夹名称。  
-例如：E:\BaiduNetdiskDownload\Flicker_geotag_library\AWS\yfcc100m_dataset-0-x.csv  
-- 分别输入地理方位最大最小经纬度范围，凡是该范围内的Flickr数据都会被提取出来。  
-- 导出文件名。导出文件会在Flickr数据文件夹下，故只需要输入文件名即可（非路径）。  
-导出格式为csv文件，每一行内容已经统一了格式，可以直接导入数据库。  
-例如：beijing  
+- 导入Flickr数据文件：选择任意Flickr数据文件即可，系统会自动获取文件夹名称并遍历该文件夹下的所有数据文件。  
+例如：E:\BaiduNetdiskDownload\flickr_data\geotag_data\0.csv  
+- 导入区域范围数据CSV文件，格式为：左上角经度，纬度，右下角经度，纬度，景点名称。    
+格式案例可以参考Region.csv
+- 导出格式为csv文件，每一行内容已经统一了格式，可以直接导入数据库。  
 
 ## 1SiteRanking
 A Ranking of Tourist Attractions based on the Facial Expressions.
@@ -92,7 +95,7 @@ Mapping the Sensitivity of the Public Emotion to the Movement of Stock Market Va
 #### √ manhattan_workflow.m
 计算曼哈顿地区股票与情绪之间相关性的完整工作流：导入数据，主成分分析，导出数据，标准化，相关性分析   
 #### √ manhattan_workflow.m
-计算伦敦和东京股票与情绪之间相关性的完整工作流
+计算伦敦和东京股票与情绪之间相关性的完整工作流：导入数据，主成分分析，导出数据，标准化，相关性分析   
 ### Workflow 2 (Python, Jupyter Notebook)
 #### × 带数字的文件
 - × 输入文件为从数据库直接导出的情绪数据文件和各股票文件（待改进：文件命名需要替换的地方多，需要导出为Python，暴露统一接口）
@@ -102,6 +105,3 @@ Mapping the Sensitivity of the Public Emotion to the Movement of Stock Market Va
 绘制NASDAQ、N225、FTSE100三个文件。
 - × [数据按照月份导出csv.ipynb](2StockEmotion/数据按照月份导出csv.ipynb):
 将数据按照自己要求导出的模板文件，可以按照自己的意愿将需要的数据导出为csv。(改进：函数化）
-
-
-### Test
