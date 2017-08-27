@@ -1,2 +1,0 @@
-/*将数据文件导入表*/
-COPY flickr0 FROM 'E:\BaiduNetdiskDownload\flickr_data\geotag_data'

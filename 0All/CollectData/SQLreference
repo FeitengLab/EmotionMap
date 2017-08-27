@@ -1,3 +1,4 @@
+/*本文件包含了一些可能需要用到的SQL语句*/
 /*创建Flickr照片表*/
 CREATE TABLE flickr0
 (id BIGINT PRIMARY KEY NOT NULL,
@@ -14,3 +15,13 @@ download_url TEXT NOT NULL
 );
 CREATE INDEX iflickr_id0 ON flickr0(id);
 CREATE INDEX iflickr_date0 ON flickr0(photo_date_taken);
+
+/*添加情绪相关属性*/
+ALTER TABLE flickr0 ADD facenum integer;
+ALTER TABLE flickr0 ADD emotion json;
+
+/*将数据文件导入表*/
+COPY flickr0 FROM 'E:\BaiduNetdiskDownload\flickr_data\geotag_data'
+
+/*从json数组中获取相应的属性*/
+SELECT json_array_elements(emotion)->'ethnicity'->>'value' FROM flickr0 WHERE id=39961;
