@@ -1,0 +1,3 @@
+/*添加情绪相关属性*/
+ALTER TABLE flickr0 ADD facenum integer;
+ALTER TABLE flickr0 ADD emotion json;

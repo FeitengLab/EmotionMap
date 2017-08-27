@@ -1,0 +1,16 @@
+/*创建Flickr照片表*/
+CREATE TABLE flickr0
+(id BIGINT PRIMARY KEY NOT NULL,
+userid TEXT,
+photo_date_taken DATE,
+photo_date_uploaded BIGINT,
+title TEXT,
+description TEXT,
+user_tags TEXT,
+longitude FLOAT DEFAULT 0,
+latitude FLOAT DEFAULT 0,
+accuracy INTEGER DEFAULT 0,
+download_url TEXT NOT NULL
+);
+CREATE INDEX iflickr_id0 ON flickr0(id);
+CREATE INDEX iflickr_date0 ON flickr0(photo_date_taken);
