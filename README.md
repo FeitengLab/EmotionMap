@@ -73,7 +73,16 @@ geotag文件夹下为带有地理坐标数据的CSV文件（共约4600万条数�
 例如：E:\BaiduNetdiskDownload\flickr_data\geotag_data\0.csv  
 - 导入区域范围数据CSV文件，格式为：左上角经度，纬度，右下角经度，纬度，景点名称。    
 格式案例可以参考Region.csv
-- 导出格式为csv文件，每一行内容已经统一了格式，可以直接导入数据库。  
+- 导出格式为csv文件，每一行内容已经统一了格式，可以直接导入数据库。
+### CollectData
+获取情绪数据
+用法：
+- 打开CloudDatabase.py文件，该文件包含以下功能：
+（1）创建照片表：修改数据库的相关参数，创建照片表
+（2）导入CSV文件：传入本地数据的路径，则可以将本地数据传入到云端数据库中
+（3）添加情绪字段：在数据传输完毕后，添加新的两列数据字段
+- 打开DetectEmotion.py文件，该文件可以对相应的数据库中照片数据进行情绪识别
+方法：修改API KEY / SECRET，同时修改表的id即可。
 
 ## 1SiteRanking
 A Ranking of Tourist Attractions based on the Facial Expressions.
