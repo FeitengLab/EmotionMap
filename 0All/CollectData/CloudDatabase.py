@@ -26,6 +26,7 @@ class CloudDatabase(object):
     # Write log file
     # 输出日志
     def write_log(self, e):
+        self.connection.rollback()
         with open("log.txt", 'a') as log_file:
             log_file.writelines(str(e))
 
@@ -110,12 +111,13 @@ class CloudDatabase(object):
 
 if __name__ == '__main__':
     # 连接数据库
-    # database = CloudDatabase("Flickr1", "postgres", "postgres", "47.89.209.207")
-    database = CloudDatabase("Flickr1", "postgres", "postgres", "127.0.0.1")
+    database = CloudDatabase("Flickr1", "postgres", "postgres", "47.89.209.207")
+    # 连接本地数据库
+    # database = CloudDatabase("Flickr1", "postgres", "postgres", "127.0.0.1")
     database.db_connect()
     # 创建照片表
     # database.create_table(0, 26)
     # 导入csv数据
-    # database.import_csv2db("E:\\BaiduNetdiskDownload\\flickr_data\\geotag_data", 0, 1)
+    database.import_csv2db("E:\\BaiduNetdiskDownload\\flickr_data\\geotag_data", 0, 26)
     # 添加情绪属性
-    database.add_emotion_fields(0,1)
+    database.add_emotion_fields(0, 26)
