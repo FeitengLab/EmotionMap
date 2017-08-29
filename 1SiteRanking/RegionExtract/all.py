@@ -16,15 +16,36 @@ class data:
         self.uploadtime = uploadtime
         self.title = title
         self.description = description
-        self.geotag = geotag
+        self.geotag = str(geotag)
         self.lon = lon
         self.lat = lat
         self.accuracy = accuracy
         self.url = url
         data.datacount += 1
 
+    def tag_wash(self):
+        words=['\n',' ','+']
+        for word in words:
+            self.geotag=self.geotag.replace(word,'')
 
-# 读取每一行数据，存储到list[i]里
+        self.geotag = self.geotag.lower()
+        self.geotag = self.geotag.replace('\'', '')
+        self.geotag = self.geotag.replace(' ', '')
+        self.geotag = self.geotag.replace('+', '')
+        self.geotag = self.geotag.replace('_', '')
+        self.geotag = self.geotag.replace('-', '')
+        self.geotag = self.geotag.replace('%', '')
+        self.geotag = self.geotag.replace('0', '')
+        self.geotag = self.geotag.replace('9', '')
+        self.geotag = self.geotag.replace('8', '')
+        self.geotag = self.geotag.replace('7', '')
+        self.geotag = self.geotag.replace('6', '')
+        self.geotag = self.geotag.replace('5', '')
+        self.geotag = self.geotag.replace('4', '')
+        self.geotag = self.geotag.replace('3', '')
+        self.geotag = self.geotag.replace('2', '')
+        self.geotag = self.geotag.replace('1', '')
+        # 读取每一行数据，存储到list[i]里
 
 try:
     rootdir = "H:\emotion\sites"
@@ -52,7 +73,6 @@ try:
                         list.append(instance)
                         number = number + 1
                         print(instance.lon)
-            fd.close()
             print(number)
 
             # 数据存储完毕，list里共有number条记录
