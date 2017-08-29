@@ -108,33 +108,33 @@ def detect_emotion(img_url):
 
 
 if __name__ == '__main__':
-    try:
-        # 连接数据库
-        # database = CloudDatabase("Flickr1", "postgres", "postgres", "47.89.209.207")
-        database = CloudDatabase("Flickr1", "postgres", "postgres", "127.0.0.1")
-        database.db_connect()
-        # 查询未被搜索的人脸
-        img_id, url = database.query_photo()
-        # 说明没有结束
-        while id != None:
+    # 连接数据库
+    # database = CloudDatabase("Flickr1", "postgres", "postgres", "47.89.209.207")
+    database = CloudDatabase("Flickr1", "postgres", "postgres", "127.0.0.1")
+    database.db_connect()
+    # 查询未被搜索的人脸
+    img_id, url = database.query_photo()
+    # 说明没有结束
+    while id != None:
+        try:
             # 获取人脸的数目和情绪信息
             face_count, face_info = detect_emotion(url)
             # 如果并发超过限值则重复
             if face_count == "403":
                 continue
-            # 如果图片解析错误则跳过进入下一条
+                # 如果图片解析错误则跳过进入下一条
             elif face_count == None:
                 database.change_nofaces(img_id)
                 img_id, url = database.query_photo()
                 continue
-            # 如果无人脸则facenum设为0
+                # 如果无人脸则facenum设为0
             if face_count == 0:
                 database.change_nofaces(img_id)
-            # 如果有人脸则记录人脸数目和具体情绪信息
+                # 如果有人脸则记录人脸数目和具体情绪信息
             else:
                 database.change_faces(img_id, face_count, face_info)
-            # 继续查询未被搜索的人脸
+                # 继续查询未被搜索的人脸
             img_id, url = database.query_photo()
-    except Exception as e:
-        with open("log{0}.txt".format(TABLE_ID), 'a') as log_file:
-            log_file.writelines("[Errno {0}] \n".format(e))
+        except Exception as e:
+            with open("log{0}.txt".format(TABLE_ID), 'a') as log_file:
+                log_file.writelines("[Errno {0}] \n".format(e))
