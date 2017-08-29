@@ -34,8 +34,8 @@ class CloudDatabase(object):
     # 输出日志
     def write_log(self, e):
         self.connection.rollback()
-        with open("log.txt", 'a') as log_file:
-            log_file.writelines(str(e))
+        with open("log{0}.txt".format(TABLE_ID), 'a') as log_file:
+            log_file.writelines("[Errno {0}] \n".format(e))
 
     # 查询没有探测人脸的照片并获取id和url
     def query_photo(self):
@@ -62,7 +62,11 @@ class CloudDatabase(object):
         try:
             face_info = []
             for k in range(0, count):
-                face_info.append(emotion["faces"][k]["attributes"])
+                # 如果人脸的数目大于5
+                try:
+                    face_info.append(emotion["faces"][k]["attributes"])
+                except Exception as e:
+                    self.write_log(e)
             face_info = json.dumps(face_info)
             sql_command = "UPDATE flickr{0} SET facenum={1},emotion='{2}' WHERE id={3}".format(TABLE_ID, count,
                                                                                                face_info,
@@ -75,16 +79,32 @@ class CloudDatabase(object):
 
 # 探测人的情绪
 def detect_emotion(img_url):
-    url = "https://api-us.faceplusplus.com/facepp/v3/detect"
-    params = {
-        "api_key": API_KEY,
-        "api_secret": API_SECRET,
-        "image_url": img_url,
-        "return_attributes": "gender,age,smiling,emotion,facequality,ethnicity"
-    }
-    r = requests.post(url, params)
-    face_info = json.loads(r.content.decode())
-    return len(face_info["faces"]), face_info
+    try:
+        url = "https://api-us.faceplusplus.com/facepp/v3/detect"
+        params = {
+            "api_key": API_KEY,
+            "api_secret": API_SECRET,
+            "image_url": img_url,
+            "return_attributes": "gender,age,smiling,emotion,facequality,ethnicity"
+        }
+        r = requests.post(url, params)
+        # 如果没有超过并发限制
+        if r.status_code != 403:
+            face_info = json.loads(r.content.decode())
+            try:
+                if len(face_info["faces"]) > -1:
+                    return len(face_info["faces"]), face_info
+                else:
+                    return None, None
+            except Exception as e:
+                with open("log{0}.txt".format(TABLE_ID), 'a') as log_file:
+                    log_file.writelines("[Errno {0}] \n".format(e))
+                return None, None
+        else:
+            return "403", None
+    except Exception as  e:
+        with open("log{0}.txt".format(TABLE_ID), 'a') as log_file:
+            log_file.writelines("[Errno {0}] \n".format(e))
 
 
 if __name__ == '__main__':
@@ -99,14 +119,22 @@ if __name__ == '__main__':
         while id != None:
             # 获取人脸的数目和情绪信息
             face_count, face_info = detect_emotion(url)
-            # 如果无人脸
+            # 如果并发超过限值则重复
+            if face_count == "403":
+                continue
+            # 如果图片解析错误则跳过进入下一条
+            elif face_count == None:
+                database.change_nofaces(img_id)
+                img_id, url = database.query_photo()
+                continue
+            # 如果无人脸则facenum设为0
             if face_count == 0:
                 database.change_nofaces(img_id)
-            # 如果有人脸
+            # 如果有人脸则记录人脸数目和具体情绪信息
             else:
                 database.change_faces(img_id, face_count, face_info)
             # 继续查询未被搜索的人脸
             img_id, url = database.query_photo()
     except Exception as e:
-        with open("log.txt", 'a') as log_file:
-            log_file.writelines(str(e))
+        with open("log{0}.txt".format(TABLE_ID), 'a') as log_file:
+            log_file.writelines("[Errno {0}] \n".format(e))
