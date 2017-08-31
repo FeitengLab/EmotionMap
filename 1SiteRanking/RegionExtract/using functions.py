@@ -1,13 +1,12 @@
-import psycopg2
-import win32ui
 import os
 import os.path
 from collections import Counter
 
-class data:
-    datacount=0
 
-    def __init__(self, photoid, userid,taketime,uploadtime,title,description,geotag,lon,lat,accuracy,url):
+class data:
+    datacount = 0
+
+    def __init__(self, photoid, userid, taketime, uploadtime, title, description, geotag, lon, lat, accuracy, url):
         self.photoid = photoid
         self.userid = userid
         self.taketime = taketime
@@ -17,13 +16,12 @@ class data:
         self.geotag = geotag
         self.lon = lon
         self.lat = lat
-        self.accuracy =accuracy
-        self.url=url
+        self.accuracy = accuracy
+        self.url = url
         data.datacount += 1
 
 
-
-def storage(path,list):
+def storage(path, list):
     # 读取每一行数据，存储到list[i]里
     number = 0
     with open(path, 'r') as fd:
@@ -36,22 +34,20 @@ def storage(path,list):
                 list.append(instance)
                 number = number + 1
                 print(instance.lon)
-    fd.close()
+    # 因为你使用了with as的表达所以不需要再close了
+    # fd.close()
     print(number)
     # 数据存储完毕，list里共有number条记录
     return number
 
 
-
-def geotagpro(list,listgeotag,list_geotag_string,number):
+def geotagpro(list, listgeotag, list_geotag_string, number):
     # 对list[i]的geotag进行处理
+    words = ['\'', ' ', '+', '_', '-']
     for i in range(0, number):
         list[i].geotag = list[i].geotag.lower()
-        list[i].geotag = list[i].geotag.replace('\'', '')
-        list[i].geotag = list[i].geotag.replace(' ', '')
-        list[i].geotag = list[i].geotag.replace('+', '')
-        list[i].geotag = list[i].geotag.replace('_', '')
-        list[i].geotag = list[i].geotag.replace('-', '')
+        for word in words:
+            list[i].geotag = list[i].geotag.replace(word, '')
         list[i].geotag = list[i].geotag.replace('%', '')
         list[i].geotag = list[i].geotag.replace('0', '')
         list[i].geotag = list[i].geotag.replace('9', '')
@@ -75,9 +71,7 @@ def geotagpro(list,listgeotag,list_geotag_string,number):
         splitgeotag = list[i].geotag.split(',')
         for section in splitgeotag:
             listgeotag.append(section)
-
     return
-
 
 
 def geofrequency(listgeotag):
@@ -88,7 +82,6 @@ def geofrequency(listgeotag):
     frequency_string = frequency_string.split(',')
 
     return frequency_string
-
 
 
 def creatfile(filename):
@@ -107,7 +100,6 @@ def creatfile(filename):
     # 文件夹创建和存入完毕
 
 
-
 def writefrequency(frequency_string):
     for one in frequency_string:
         #   filefrequency = open('C:/Users/Administrator/Desktop/geotagfrequency.txt', 'a+')
@@ -119,17 +111,15 @@ def writefrequency(frequency_string):
         # 词频统计完毕，结果存储在frequency中；导出文件为geotagfrequency
 
 
-
 def filtergeotag():
-    #获取用户输入的geotag筛选词
+    # 获取用户输入的geotag筛选词
     geotag_aim = input("Enter your input: ")
     print("Received input is : ", geotag_aim)
 
     return geotag_aim
 
 
-
-def writealltxt(geotag_aim,list_geotag_string,number,list):
+def writealltxt(geotag_aim, list_geotag_string, number, list):
     filterdata = []
     count = 0
     for j in range(0, number):
@@ -147,9 +137,7 @@ def writealltxt(geotag_aim,list_geotag_string,number,list):
             filedbscan = open('dbscaninput.txt', 'a+')
             filedbscan.write('photoid' + '\t' + 'userid' + '\t' + 'x' + '\t' + 'y' + '\n')
             list[j].userid = list[j].userid.replace('\'', '')
-            filedbscan.write(
-                str(list[j].photoid) + ',' + str(list[j].userid) + ',' + str(list[j].lon) + ',' + str(
-                    list[j].lat) + '\n')
+            filedbscan.write("{0},{1},{2},{3}\n".format(list[j].photoid, list[j].userid, list[j].lon, list[j].lat))
             filedbscan.close()
 
             # 按userid统计的每个user所发照片数量的txt的原始数据
@@ -172,48 +160,51 @@ def writealltxt(geotag_aim,list_geotag_string,number,list):
 
     return
 
-try:
-    # 遍历文件夹内所有文件
-    rootdir = "H:\emotion\sites"
-    for parent, dirnames, filenames in os.walk(rootdir):
-        for dirname in dirnames:  # 输出文件夹信息
-            print("parent is:" + parent)
-            print("dirname is" + dirname)
 
-        for filename in filenames:  # 输出文件信息
-            print(filenames)
-            print("parent is:" + parent)
-            print("filename is:" + filename)
-            print("the full name of the file is:" + os.path.join(parent, filename))  # 输出文件路径信息
-            path = os.path.join(parent, filename)
+# 主函数
+if __name__ == '__main__':
+    try:
+        # 遍历文件夹内所有文件
+        rootdir = "H:\emotion\sites"
+        for parent, dirnames, filenames in os.walk(rootdir):
+            for dirname in dirnames:  # 输出文件夹信息
+                print("parent is:" + parent)
+                print("dirname is" + dirname)
 
-            #函数引用
+            for filename in filenames:  # 输出文件信息
+                print(filenames)
+                print("parent is:" + parent)
+                print("filename is:" + filename)
+                print("the full name of the file is:" + os.path.join(parent, filename))  # 输出文件路径信息
+                path = os.path.join(parent, filename)
 
-            # 读取每一行数据，存储到list[i]里
-            list = []
-            number=storage(path,list)
-            # 数据存储完毕，list里共有number条记录
+                # 函数引用
 
-            # 对list[i]的geotag进行处理
-            # 将每一个geotag替换特殊字符，按,分列，所有的分列后的geotag放进同一个数组listgeotag
-            listgeotag=[]
-            list_geotag_string=[]
-            geotagpro(list, listgeotag, list_geotag_string,number)
+                # 读取每一行数据，存储到list[i]里
+                list = []
+                number = storage(path, list)
+                # 数据存储完毕，list里共有number条记录
 
-            # 统计geotag词频
-            frequency_string=geofrequency(listgeotag)
+                # 对list[i]的geotag进行处理
+                # 将每一个geotag替换特殊字符，按,分列，所有的分列后的geotag放进同一个数组listgeotag
+                listgeotag = []
+                list_geotag_string = []
+                geotagpro(list, listgeotag, list_geotag_string, number)
 
-            # 文件夹创建和存入
-            creatfile(filename)
+                # 统计geotag词频
+                frequency_string = geofrequency(listgeotag)
 
-            # 词频统计导出文件为geotagfrequency
-            writefrequency(frequency_string)
+                # 文件夹创建和存入
+                creatfile(filename)
 
-            # 获取用户输入的geotag筛选词
-            geotag_aim=filtergeotag()
+                # 词频统计导出文件为geotagfrequency
+                writefrequency(frequency_string)
 
-            # 获得dbscan的input数据的csv形式，以及其余两个也许用得到的csv文件，具体注释在相应函数里
-            writealltxt(geotag_aim, list_geotag_string, number, list)
+                # 获取用户输入的geotag筛选词
+                geotag_aim = filtergeotag()
 
-except Exception as e:
-    print(repr(e))
+                # 获得dbscan的input数据的csv形式，以及其余两个也许用得到的csv文件，具体注释在相应函数里
+                writealltxt(geotag_aim, list_geotag_string, number, list)
+
+    except Exception as e:
+        print(repr(e))
