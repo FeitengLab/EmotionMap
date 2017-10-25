@@ -112,16 +112,16 @@ class CloudDatabase(object):
 if __name__ == '__main__':
     try:
         # 连接数据库
-        database = CloudDatabase("Flickr1", "postgres", "postgres", "47.89.209.207")
+        # database = CloudDatabase("Flickr1", "postgres", "postgres", "47.89.209.207")
         # 连接本地数据库
-        # database = CloudDatabase("Flickr1", "postgres", "postgres", "127.0.0.1")
+        database = CloudDatabase("Flickr1", "postgres", "postgres", "127.0.0.1")
         database.db_connect()
         # 创建照片表
-        # database.create_table(0, 26)
+        database.create_table(0, 1)
         # 导入csv数据
-        database.import_csv2db("E:\\BaiduNetdiskDownload\\flickr_data\\geotag_data", 0, 26)
+        database.import_csv2db("D:\\BaiduNetdiskDownload\\geotag", 0, 1)
         # 添加情绪属性
-        database.add_emotion_fields(0, 26)
+        database.add_emotion_fields(0, 1)
     except Exception as e:
         with open("log.txt", 'a') as log_file:
             log_file.writelines(str(e))
