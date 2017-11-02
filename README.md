@@ -82,7 +82,11 @@ geotag文件夹下为带有地理坐标数据的CSV文件（共约4600万条数�
 （2）导入CSV文件：传入本地数据的路径，则可以将本地数据传入到云端数据库中
 （3）添加情绪字段：在数据传输完毕后，添加新的两列数据字段
 - 打开DetectEmotion.py文件，该文件可以对相应的数据库中照片数据进行情绪识别
-方法：修改API KEY / SECRET，同时修改表的id即可。
+方法：修改API KEY / SECRET，同时修改表的id即可。    
+  
+批量从云端导出数据
+- 服务器上运行[server_output_checksum.py](0All/CollectData/server_output_check.py)
+- 本地z命令行运行[linux_file_to_win.py](0All/CollectData/linux_file_to_win.py)（注意需要同目录的几个exe文件）
 
 ## 1SiteRanking
 A Ranking of Tourist Attractions based on the Facial Expressions.
