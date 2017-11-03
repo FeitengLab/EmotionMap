@@ -89,6 +89,9 @@ geotag文件夹下为带有地理坐标数据的CSV文件（共约4600万条数�
 - 服务器上运行[server_output_checksum.py](0All/CollectData/server_output_checksum.py)
 - 本地z命令行运行[linux_file_to_win.py](0All/CollectData/linux_file_to_win.py)（注意需要同目录的几个exe文件）
 
+将情绪数据从照片转换为人脸为单位
+- 修改[Photo2Face](0All/CollectData/Photo2Face.py)中数据的路径，即可将照片中所有的情绪转换为以人脸为单位的情绪值
+
 ### HCHO
 贾清源有关获取情绪数据、写入数据库的代码方法文件  
 emotion4.01.py
