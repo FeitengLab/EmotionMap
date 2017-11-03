@@ -48,6 +48,8 @@ def write_faces(file_source_path,file_result_path):
                         f_result.write(line_result + '\n')
 
 if __name__ == '__main__':
+    #i=5
+    #write_faces('flickr{0}.txt'.format(i),'faceflickr{0}.txt'.format(i))
     for i in range(0,26):
         write_faces('flickr{0}.txt'.format(i),'faceflickr{0}.txt'.format(i))
 
