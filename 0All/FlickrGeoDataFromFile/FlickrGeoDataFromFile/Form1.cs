@@ -19,7 +19,8 @@ namespace FlickrGeoDataFromFile
     public partial class Form1 : Form
     {
         List<Region> regionList = new List<Region>();//所有的矩形区域集合
-        string importPath, exportPath, flickrDataFolder, flickrDataCSV;
+        string importPath, exportPath, flickrDataFolder, flickrDataCSV, fileType;
+        string filenameAll = "faceflickr";
 
         public Form1()
         {
@@ -30,8 +31,8 @@ namespace FlickrGeoDataFromFile
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.CheckFileExists = true;
-            openFileDialog.Title = "打开CSV";
-            openFileDialog.Filter = "CSV(*.csv)|*.csv;|所有文件(*.*)|*.*";
+            openFileDialog.Title = "打开数据";
+            openFileDialog.Filter = "所有文件(*.*)|*.*";
             openFileDialog.Multiselect = false;
             openFileDialog.RestoreDirectory = true;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -40,7 +41,9 @@ namespace FlickrGeoDataFromFile
                 {
                     //获取Flickr数据文件路径
                     flickrDataFolder = openFileDialog.FileName.Substring(0, openFileDialog.FileName.LastIndexOf('\\'));
-                    flickrDataCSV = string.Format("{0}\\0.csv", flickrDataFolder);
+
+                    fileType = openFileDialog.FileName.Split('.')[1];
+                    flickrDataCSV = string.Format("{0}\\{1}0.{2}", flickrDataFolder, filenameAll, fileType);
                     tbxImportFlickrDataPath.Text = flickrDataCSV;
                 }
                 catch (Exception ex)
@@ -54,8 +57,8 @@ namespace FlickrGeoDataFromFile
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.CheckFileExists = true;
-            openFileDialog.Title = "打开CSV";
-            openFileDialog.Filter = "CSV(*.csv)|*.csv;|所有文件(*.*)|*.*";
+            openFileDialog.Title = "打开区域文件";
+            openFileDialog.Filter = "所有文件(*.*)|*.*";
             openFileDialog.Multiselect = false;
             openFileDialog.RestoreDirectory = true;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -89,7 +92,7 @@ namespace FlickrGeoDataFromFile
             //读取所有的Flickr数据
             for (int i = 0; i <= 25; i++)
             {
-                flickrDataCSV = string.Format("{0}\\{1}.csv", flickrDataFolder, i);
+                flickrDataCSV = string.Format("{0}\\{1}{2}.{3}", flickrDataFolder, filenameAll, i, fileType);
                 ExtractPts(new StreamReader(flickrDataCSV));
             }
             tbxStatus.Text += "导出完毕!";
@@ -152,6 +155,8 @@ namespace FlickrGeoDataFromFile
             public double latitude { get; }
             int accuracy;
             string flickrDataLine;
+            Emotion emotion;
+            Face face;
 
             public FlickrData(string flickrDataLine)
             {
@@ -168,6 +173,8 @@ namespace FlickrGeoDataFromFile
                 latitude = Convert.ToDouble(flickrDataLine.Split('\t')[8]);
                 accuracy = Convert.ToInt32(flickrDataLine.Split('\t')[9]);
                 url = Convert.ToString(flickrDataLine.Split('\t')[10]);
+                emotion = new Emotion(Convert.ToString(flickrDataLine.Split('\t')[11]));
+                face = new Face(Convert.ToString(flickrDataLine.Split('\t')[12]));
             }
             public string FlickrDataWrite()
             {
@@ -240,6 +247,61 @@ namespace FlickrGeoDataFromFile
                     MessageBox.Show(ex.ToString());
                     return false;
                 }
+            }
+        }
+
+        /// <summary>
+        /// 将情绪值格式化提取
+        /// </summary>
+        public class Emotion
+        {
+            public double surprise { set; get; }
+            public double sadness { set; get; }
+            public double anger { set; get; }
+            public double happiness { set; get; }
+            public double neutral { set; get; }
+            public double disgust { set; get; }
+            public double fear { set; get; }
+            public Emotion(string emotion)
+            {
+                surprise = Convert.ToDouble(emotion.Split(',')[0]);
+                sadness = Convert.ToDouble(emotion.Split(',')[1]);
+                anger = Convert.ToDouble(emotion.Split(',')[2]);
+                happiness = Convert.ToDouble(emotion.Split(',')[3]);
+                neutral = Convert.ToDouble(emotion.Split(',')[4]);
+                disgust = Convert.ToDouble(emotion.Split(',')[5]);
+                fear = Convert.ToDouble(emotion.Split(',')[6]);
+            }
+        }
+
+        /// <summary>
+        /// 将人脸的各种属性提取出来
+        /// </summary>
+        public class Face
+        {
+            class Threshold2Value
+            {
+                double threshold { set; get; }
+                double value { set; get; }
+                public void Init(double thres, double val)
+                {
+                    this.threshold = thres;
+                    this.value = val;
+                }
+            }
+            Threshold2Value faceQuality = new Threshold2Value();
+            Threshold2Value smile = new Threshold2Value();
+            double gender { set; get; }
+            double age { set; get; }
+            double ethnicity { set; get; }
+
+            public Face(string face)
+            {
+                faceQuality.Init(Convert.ToDouble(face.Split(',')[0]), Convert.ToDouble(face.Split(',')[1]));
+                smile.Init(Convert.ToDouble(face.Split(',')[2]), Convert.ToDouble(face.Split(',')[3]));
+                gender = Convert.ToDouble(face.Split(',')[2]);
+                age = Convert.ToDouble(face.Split(',')[2]);
+                ethnicity = Convert.ToDouble(face.Split(',')[2]);
             }
         }
     }

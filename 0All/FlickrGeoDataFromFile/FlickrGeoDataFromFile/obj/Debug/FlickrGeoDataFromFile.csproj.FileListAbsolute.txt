@@ -7,3 +7,13 @@ E:\Users\KYH\Documents\GitHub\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDat
 E:\Users\KYH\Documents\GitHub\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.csproj.GenerateResource.Cache
 E:\Users\KYH\Documents\GitHub\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.exe
 E:\Users\KYH\Documents\GitHub\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.pdb
+D:\Users\KYH\Documents\Pycharm\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\bin\Debug\FlickrGeoDataFromFile.exe.config
+D:\Users\KYH\Documents\Pycharm\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\bin\Debug\FlickrGeoDataFromFile.exe
+D:\Users\KYH\Documents\Pycharm\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\bin\Debug\FlickrGeoDataFromFile.pdb
+D:\Users\KYH\Documents\Pycharm\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.csprojResolveAssemblyReference.cache
+D:\Users\KYH\Documents\Pycharm\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.Form1.resources
+D:\Users\KYH\Documents\Pycharm\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.Properties.Resources.resources
+D:\Users\KYH\Documents\Pycharm\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.csproj.GenerateResource.Cache
+D:\Users\KYH\Documents\Pycharm\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.csproj.CoreCompileInputs.cache
+D:\Users\KYH\Documents\Pycharm\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.exe
+D:\Users\KYH\Documents\Pycharm\EmotionMap\0All\FlickrGeoDataFromFile\FlickrGeoDataFromFile\obj\Debug\FlickrGeoDataFromFile.pdb

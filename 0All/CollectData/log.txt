@@ -1,0 +1,8 @@
+no connection to the server
+connection already closedno connection to the server
+syntax error at end of input
+LINE 1: INSERT INTO flickr25 VALUES
+                                   ^
+syntax error at end of input
+LINE 1: INSERT INTO flickr5 VALUES
+                                  ^
