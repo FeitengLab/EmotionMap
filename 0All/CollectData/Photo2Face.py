@@ -47,7 +47,7 @@ def dict2csv(single_face):
     else:
         remain_l[-1] = 2
 
-    face_csv = ",".join([str(emotion_score), str(remain_l)])
+    face_csv = "\t".join([str(emotion_score), str(remain_l)])
 
     return face_csv
 
