@@ -20,36 +20,48 @@ def decode_json(faces_str):
 
 # 输入：单张脸的属性 输出：'[7个情绪值], [其他属性值]'
 def dict2csv(single_face):
+    face_list = []
 
-    # 情绪字典转化为情绪指数列表
-    emotion_score = []
-    for emotion in single_face['emotion']:
-        emotion_score.append(single_face['emotion'][emotion])
+    # 按照'happiness', 'neutral', 'sadness', 'disgust', 'anger', 'fear', 'surprise' 的顺序添加情绪指数
+    emotion = single_face['emotion']
+    face_list.append(str(emotion['happiness']))
+    face_list.append(str(emotion['neutral']))
+    face_list.append(str(emotion['sadness']))
+    face_list.append(str(emotion['disgust']))
+    face_list.append(str(emotion['anger']))
+    face_list.append(str(emotion['fear']))
+    face_list.append(str(emotion['surprise']))
 
-    # 其余属性汇总成列表
-    remain_l = []
-    del single_face['emotion']
-    for i in single_face:
-        for j in single_face[i]:
-            remain_l.append(single_face[i][j])
+    # 添加 facequality 和 smile 的阈值和值
+    facequality = single_face['facequality']
+    face_list.append(str(facequality['threshold']))
+    face_list.append(str(facequality['value']))
 
-    # 'Male'->0; 'Female'->1
-    if remain_l[-3] == 'Male':
-        remain_l[-3] = 0
+    smile = single_face['smile']
+    face_list.append(str(smile['threshold']))
+    face_list.append(str(smile['value']))
+
+    # 添加 gender：'Male'->0; 'Female'->1
+    gender = single_face['gender']['value']
+    if gender == 'Male':
+        face_list.append('0')
     else:
-        remain_l[-3] = 1
+        face_list.append('1')
 
-    # 'Asian'->0; 'White'->1; 'Black'->2
-    if remain_l[-1] == 'Asian':
-        remain_l[-1] = 0
-    elif remain_l[-1] == 'White':
-        remain_l[-1] = 1
+    # 添加 ethnicity：'Asian'->0; 'White'->1; 'Black'->2
+    ethnicity = single_face['ethnicity']['value']
+    if ethnicity == 'Asian':
+        face_list.append('0')
+    elif ethnicity == 'White':
+        face_list.append('1')
     else:
-        remain_l[-1] = 2
+        face_list.append('2')
 
-    face_csv = "\t".join([str(emotion_score), str(remain_l)])
+    # 添加 age
+    age = single_face['age']['value']
+    face_list.append(str(age))
 
-    return face_csv
+    return face_list
 
 
 def write_faces(file_source_path, file_result_path):
@@ -61,26 +73,30 @@ def write_faces(file_source_path, file_result_path):
 
             # 逐行读取数据并转化为列表
             for line_source in f_source.readlines():
-                line_list = line_source.split('\t')
-                if len(line_list) > 11:    # 排除没有数据的行
+                line_base = line_source.split('\t')
+                if len(line_base) > 11:  # 排除没有数据的行
                     data_count = data_count + 1
 
-                # line_list[11]: facenum；line_list[12]：attribute
-                    if (line_list[11] != 'facenum') and (line_list[11] != '0') and (len(line_list) == 13):
-                        face_l = decode_json(line_list[12])
+                    # line_list[11]: facenum；line_list[12]：attribute
+                    if (line_base[11] != 'facenum') and (line_base[11] != '0') and (len(line_base) == 13):
+                        face_l = decode_json(line_base[12])
                         has_faces_count = has_faces_count + 1
+                        del line_base[12]
 
                         # 将单张人脸属性转化为特定格式并写入一行数据
                         for face in face_l:
-                            face_csv = dict2csv(face)
-                            line_list[12] = face_csv
-                            line_result = "\t".join(line_list)
+                            face_list = dict2csv(face)
+                            line_result = line_base + face_list
+                            line_result = "\t".join(line_result)
                             f_result.write(line_result + '\n')
                             face_count = face_count + 1
+                            # print(line_source)
+                            # print(line_result)
 
             counts = [file_source_path, str(data_count), str(has_faces_count), str(face_count)]
-            print(counts)
+            # print(counts)
             return counts
+
 
 if __name__ == '__main__':
     # 输出
