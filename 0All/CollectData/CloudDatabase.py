@@ -117,6 +117,7 @@ if __name__ == '__main__':
         # database = CloudDatabase("Flickr1", "postgres", "postgres", "127.0.0.1")
         database.db_connect()
         # 创建照片表
+        # start指的是从第几个数据库表开始end表示的是第几个数据库表结束
         start = 22
         end = 23
         database.create_table(start, end)

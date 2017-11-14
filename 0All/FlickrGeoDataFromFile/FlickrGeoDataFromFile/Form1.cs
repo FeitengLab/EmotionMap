@@ -92,8 +92,15 @@ namespace FlickrGeoDataFromFile
             //读取所有的Flickr数据
             for (int i = 0; i <= 25; i++)
             {
-                flickrDataCSV = string.Format("{0}\\{1}{2}.{3}", flickrDataFolder, filenameAll, i, fileType);
-                ExtractPts(new StreamReader(flickrDataCSV));
+                try
+                {
+                    flickrDataCSV = string.Format("{0}\\{1}{2}.{3}", flickrDataFolder, filenameAll, i, fileType);
+                    ExtractPts(new StreamReader(flickrDataCSV));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
             }
             tbxStatus.Text += "导出完毕!";
         }
@@ -153,28 +160,59 @@ namespace FlickrGeoDataFromFile
             string userid, photoTakeTime, photoTitle, photoDescription, photoGeotag, url;
             public double longitude { get; }
             public double latitude { get; }
-            int accuracy;
+            public double happiness { get; }
+            public double neutral { get; }
+            public double sadness { get; }
+            public double disgust { get; }
+            public double anger { get; }
+            public double fear { get; }
+            public double surprise { get; }
+            public double facequality_s { get; }
+            public double facequality_v { get; }
+            public double smile_s { get; }
+            public double smile_v { get; }
+            public double gender { get; }
+            public double ethnicity { get; }
+            public double age { get; }
+            int accuracy, facenum;
             string flickrDataLine;
-            Emotion emotion;
-            Face face;
 
             public FlickrData(string flickrDataLine)
             {
                 this.flickrDataLine = flickrDataLine;
+                
+                int i = 0;
                 //从文件中读取出Flickr数据并分配给相应的对象
-                photoId = Convert.ToInt64(flickrDataLine.Split('\t')[0]);
-                userid = Convert.ToString(flickrDataLine.Split('\t')[1]);
-                photoTakeTime = Convert.ToString(flickrDataLine.Split('\t')[2]);
-                photoUploadTime = Convert.ToInt64(flickrDataLine.Split('\t')[3]);
-                photoTitle = Convert.ToString(flickrDataLine.Split('\t')[4]);
-                photoDescription = Convert.ToString(flickrDataLine.Split('\t')[5]);
-                photoGeotag = Convert.ToString(flickrDataLine.Split('\t')[6]);
-                longitude = Convert.ToDouble(flickrDataLine.Split('\t')[7]);
-                latitude = Convert.ToDouble(flickrDataLine.Split('\t')[8]);
-                accuracy = Convert.ToInt32(flickrDataLine.Split('\t')[9]);
-                url = Convert.ToString(flickrDataLine.Split('\t')[10]);
-                emotion = new Emotion(Convert.ToString(flickrDataLine.Split('\t')[11]));
-                face = new Face(Convert.ToString(flickrDataLine.Split('\t')[12]));
+                photoId = Convert.ToInt64(flickrDataLine.Split('\t')[i++]);
+                userid = Convert.ToString(flickrDataLine.Split('\t')[i++]);
+                photoTakeTime = Convert.ToString(flickrDataLine.Split('\t')[i++]);
+                photoUploadTime = Convert.ToInt64(flickrDataLine.Split('\t')[i++]);
+                photoTitle = Convert.ToString(flickrDataLine.Split('\t')[i++]);
+                photoDescription = Convert.ToString(flickrDataLine.Split('\t')[i++]);
+                photoGeotag = Convert.ToString(flickrDataLine.Split('\t')[i++]);
+                longitude = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                latitude = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                accuracy = Convert.ToInt32(flickrDataLine.Split('\t')[i++]);
+                url = Convert.ToString(flickrDataLine.Split('\t')[i++]);
+                ///*
+                facenum = Convert.ToInt32(flickrDataLine.Split('\t')[i++]);
+                // 按照'happiness', 'neutral', 'sadness', 'disgust', 'anger', 'fear', 'surprise' 的顺序添加情绪指数
+                happiness = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                neutral = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                sadness = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                disgust = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                anger = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                fear = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                surprise = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                // facequality, smile, gender, ethnicity, age
+                facequality_s = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                facequality_v = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                smile_s = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                smile_v = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                gender = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                ethnicity = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                age = Convert.ToDouble(flickrDataLine.Split('\t')[i++]);
+                //*/
             }
             public string FlickrDataWrite()
             {
@@ -247,61 +285,6 @@ namespace FlickrGeoDataFromFile
                     MessageBox.Show(ex.ToString());
                     return false;
                 }
-            }
-        }
-
-        /// <summary>
-        /// 将情绪值格式化提取
-        /// </summary>
-        public class Emotion
-        {
-            public double surprise { set; get; }
-            public double sadness { set; get; }
-            public double anger { set; get; }
-            public double happiness { set; get; }
-            public double neutral { set; get; }
-            public double disgust { set; get; }
-            public double fear { set; get; }
-            public Emotion(string emotion)
-            {
-                surprise = Convert.ToDouble(emotion.Split(',')[0]);
-                sadness = Convert.ToDouble(emotion.Split(',')[1]);
-                anger = Convert.ToDouble(emotion.Split(',')[2]);
-                happiness = Convert.ToDouble(emotion.Split(',')[3]);
-                neutral = Convert.ToDouble(emotion.Split(',')[4]);
-                disgust = Convert.ToDouble(emotion.Split(',')[5]);
-                fear = Convert.ToDouble(emotion.Split(',')[6]);
-            }
-        }
-
-        /// <summary>
-        /// 将人脸的各种属性提取出来
-        /// </summary>
-        public class Face
-        {
-            class Threshold2Value
-            {
-                double threshold { set; get; }
-                double value { set; get; }
-                public void Init(double thres, double val)
-                {
-                    this.threshold = thres;
-                    this.value = val;
-                }
-            }
-            Threshold2Value faceQuality = new Threshold2Value();
-            Threshold2Value smile = new Threshold2Value();
-            double gender { set; get; }
-            double age { set; get; }
-            double ethnicity { set; get; }
-
-            public Face(string face)
-            {
-                faceQuality.Init(Convert.ToDouble(face.Split(',')[0]), Convert.ToDouble(face.Split(',')[1]));
-                smile.Init(Convert.ToDouble(face.Split(',')[2]), Convert.ToDouble(face.Split(',')[3]));
-                gender = Convert.ToDouble(face.Split(',')[2]);
-                age = Convert.ToDouble(face.Split(',')[2]);
-                ethnicity = Convert.ToDouble(face.Split(',')[2]);
             }
         }
     }
