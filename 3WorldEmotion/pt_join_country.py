@@ -4,15 +4,19 @@
 # point spatial join to country
 import os
 import arcpy
+import csv
 from arcpy import env
 
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 # 导入XY坐标文件。传入txt文件，返回shp文件
 def Add_xy_point(pt_file, shp_file):
     table = pt_file
     in_x_field = "Field8"
     in_y_field = "Field9"
-    out_layer = "face0_layer"
+    out_layer = "face{0}_layer".format(index)
 
     print "Add x,y Point"
     arcpy.MakeXYEventLayer_management(table=table, in_x_field=in_x_field, in_y_field=in_y_field, out_layer=out_layer)
@@ -54,12 +58,12 @@ def Delete_field(out_feature_class):
 
 
 def Join_field(in_features, join_table):
-    in_layer = "face0_intersect_layer"
+    in_layer = "face{0}_intersect_layer".format(index)
     arcpy.MakeFeatureLayer_management(in_features, in_layer)
 
     in_field = "TARGET_FID"
 
-    out_layer = "face0_intersect_select_layer"
+    out_layer = "face{0}_intersect_select_layer".format(index)
     arcpy.MakeFeatureLayer_management(join_table, out_layer)
 
     join_field = "TARGET_FID"
@@ -72,8 +76,8 @@ def Join_field(in_features, join_table):
 
 def Update_field(layer):
     in_table = layer
-    in_field = "face0_intersect.ADMIN"
-    expression = "Update(!face0_intersect.ADMIN!, !face0_select_intersect.ADMIN_1!)"
+    in_field = "face{0}_intersect.ADMIN".format(index)
+    expression = "Update(!face{0}_intersect.ADMIN!, !face{0}_select_intersect.ADMIN_1!)".format(index, index)
     expression_type = "PYTHON_9.3"
     code_block = """def Update(field1,field2):
         if field1 is not None:
@@ -84,33 +88,67 @@ def Update_field(layer):
     print "Calculate Field"
     arcpy.CalculateField_management(in_table, in_field, expression, expression_type, code_block)
 
+
 def Remove_field(in_layer):
     print "Remove Field"
     arcpy.RemoveJoin_management(in_layer)
 
-    arcpy.FeatureClassToFeatureClass_conversion(in_layer,env.workspace,"Final")
+    arcpy.FeatureClassToFeatureClass_conversion(in_layer, env.workspace, "face{0}".format(index))
+
+
+def Delete_file():
+    print "Delete File"
+    arcpy.Delete_management("face{0}_intersect".format(index))
+    arcpy.Delete_management("face{0}_select".format(index))
+    arcpy.Delete_management("face{0}_select_intersect".format(index))
+
+
+def Write_csv(file):
+    print "Write File"
+    cursor = arcpy.da.SearchCursor("face{0}".format(index), "*")
+    with open(file, "w") as file:
+        writer = csv.writer(file, delimiter="\t")
+        for row in cursor:
+            row_new = list(row[4:30])
+            row_new.append(row[31])
+            writer.writerow(row_new)
+
 
 if __name__ == '__main__':
+    global index
+    index = 1
+
     env.workspace = r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\EmotionMap.mdb"
-    pt_shp = r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\face0.shp"
-    Add_xy_point(r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\face0.txt",pt_shp)
 
-    country_shp = r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\ne_10m_admin_0_countries.shp"
-    spatial_join_class = r"face0_intersect"
-    Spatial_join(pt_shp, country_shp, spatial_join_class, "INTERSECT")
+    while True:
+        try:
+            pt_shp = r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\face{0}.shp".format(index)
+            Add_xy_point(r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\face{0}.txt".format(index), pt_shp)
 
-    Select_feature("face0_intersect", "face0_select", '[ADMIN] IS Null')
+            country_shp = r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\ne_10m_admin_0_countries.shp"
+            spatial_join_class = r"face{0}_intersect".format(index)
+            Spatial_join(pt_shp, country_shp, spatial_join_class, "INTERSECT")
 
-    country_shp = r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\ne_10m_admin_0_countries.shp"
-    Spatial_join("face0_select", country_shp, "face0_select_intersect", "CLOSEST")
-    Delete_field("face0_intersect")
+            Select_feature("face{0}_intersect".format(index), "face{0}_select".format(index), '[ADMIN] IS Null')
 
-    layer = Join_field("face0_intersect", "face0_select_intersect")
-    Update_field(layer)
-    Remove_field(layer)
+            country_shp = r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\ne_10m_admin_0_countries.shp"
+            Spatial_join("face{0}_select".format(index), country_shp, "face{0}_select_intersect".format(index),
+                         "CLOSEST")
 
-'''
-    cursor=arcpy.da.SearchCursor("Final","*")
-    for row in cursor:
-        print row[25]
-        '''
+            layer = Join_field("face{0}_intersect".format(index), "face{0}_select_intersect".format(index))
+            Update_field(layer)
+            Remove_field(layer)
+
+            Delete_file()
+
+            Write_csv(r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\face{0}.csv".format(index))
+
+            index = index + 1
+            if index > 1:
+                break
+        except Exception as e:
+            with open('log.txt','a') as log:
+                log.writelines("{0},{1}".format(index, e))
+        finally:
+            if index > 1:
+                break
