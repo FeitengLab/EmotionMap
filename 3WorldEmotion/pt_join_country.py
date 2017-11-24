@@ -118,7 +118,8 @@ def Write_csv(file):
 
 if __name__ == '__main__':
     global index
-    index = 0
+    index = 1
+    end = 10
 
     env.workspace = r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\Country\EmotionMap.mdb"
     folder_path = r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\Country"
@@ -145,12 +146,12 @@ if __name__ == '__main__':
             Write_csv(folder_path + r"\face{0}.csv".format(index))
 
             index = index + 1
-            if index >= 1:
+            if index > end:
                 break
         except Exception as e:
             with open('log.txt', 'a') as log:
                 log.writelines("{0},{1}".format(index, e))
         finally:
             index = index + 1
-            if index >= 1:
+            if index > end:
                 break
