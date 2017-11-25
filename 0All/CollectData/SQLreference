@@ -25,3 +25,37 @@ COPY flickr0 FROM 'E:\BaiduNetdiskDownload\flickr_data\geotag_data'
 
 /*从json数组中获取相应的属性*/
 SELECT json_array_elements(emotion)->'ethnicity'->>'value' FROM flickr0 WHERE id=39961;
+
+/*创建带有情绪值的Flickr人脸表*/
+CREATE TABLE face0
+(id BIGINT NOT NULL,
+userid TEXT,
+photo_date_taken DATE,
+photo_date_uploaded BIGINT,
+title TEXT DEFAULT NULL,
+description TEXT DEFAULT NULL,
+user_tags TEXT DEFAULT NULL,
+longitude FLOAT DEFAULT 0,
+latitude FLOAT DEFAULT 0,
+accuracy INTEGER DEFAULT 0,
+download_url TEXT NOT NULL,
+facenum INTEGER,
+happiness FLOAT,
+neutral FLOAT,
+sadness FLOAT,
+disgust FLOAT,
+anger FLOAT,
+fear FLOAT,
+surprise FLOAT,
+facequality_s FLOAT,
+facequality_v FLOAT,
+smile_s FLOAT,
+smile_v FLOAT,
+gender INTEGER,
+ethnicity INTEGER,
+age INTEGER,
+faceid serial PRIMARY KEY
+);
+CREATE INDEX iface_id0 ON face0(id);
+CREATE INDEX iface_date0 ON face0(photo_date_taken);
+

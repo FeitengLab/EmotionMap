@@ -94,6 +94,12 @@ geotag文件夹下为带有地理坐标数据的CSV文件（共约4600万条数�
 
 test_facepp_api.py:检查API是否失效
 
+split_file.py:将大文件拆成小文件，每个文件10w张人脸
+
+format_face.py:将所有数据格式标准化从而可以导入数据库中
+
+import_to_database.py:将所有的人脸数据导入本地数据库中
+
 ### HCHO
 贾清源有关获取情绪数据、写入数据库的代码方法文件  
 emotion4.01.py
@@ -133,3 +139,9 @@ Mapping the Sensitivity of the Public Emotion to the Movement of Stock Market Va
 绘制NASDAQ、N225、FTSE100三个文件。
 - × [数据按照月份导出csv.ipynb](2StockEmotion/数据按照月份导出csv.ipynb):
 将数据按照自己要求导出的模板文件，可以按照自己的意愿将需要的数据导出为csv。(改进：函数化）
+
+## 3WorldEmotion
+#### GlobalEmotion.ipynb
+计算了世界不同人种之间的情绪差异
+#### pt_join_country.py
+将人脸数据与国家相关联
