@@ -59,7 +59,7 @@ def download_check(linux_path):
 if __name__ == "__main__":
     path_temp = '/tmp/flickr{}.zip'
     unzip_flag = False
-    for i in range(0, 5):
+    for i in [5, 22, 25]:
         path = path_temp.format(i)
         win_path = download_check(path)
         if unzip_flag:
