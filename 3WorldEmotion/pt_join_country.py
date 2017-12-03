@@ -16,8 +16,8 @@ sys.setdefaultencoding('utf-8')
 # 导入XY坐标文件。传入txt文件，返回shp文件
 def Add_xy_point(pt_file, shp_file):
     table = pt_file
-    in_x_field = "Field8"
-    in_y_field = "Field9"
+    in_x_field = "Field2"
+    in_y_field = "Field3"
     out_layer = "face{0}_layer".format(index)
 
     print "Add x,y Point"
@@ -53,6 +53,9 @@ def Select_feature(in_features, out_features, where_clause):
     print "Select"
     arcpy.Select_analysis(in_features, out_features, where_clause)
 
+def Find_near_feature(in_features,near_features):
+    print "Find nearest feature"
+    arcpy.Near_analysis(in_features,near_features)
 
 def Delete_field(out_feature_class):
     print "Delete Field"
@@ -107,43 +110,52 @@ def Delete_file():
 
 def Write_csv(file):
     print "Write File"
-    cursor = arcpy.da.SearchCursor("face{0}".format(index), "*")
+    #cursor = arcpy.da.SearchCursor("face{0}_intersect".format(index), "*")
+    cursor = arcpy.da.SearchCursor("face{0}_select".format(index), "*")
     with open(file, "wb") as file:
         writer = csv.writer(file, delimiter="\t")
         for row in cursor:
-            row_new = list(row[4:30])
-            row_new.append(row[31])
+            row_new = []
+            row_new.append(row[7])
+            row_new.append(row[10])
             writer.writerow(row_new)
 
 
 if __name__ == '__main__':
     global index
-    index = 1
-    end = 10
+    index = 98
+    end = 134
 
-    env.workspace = r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\Country\EmotionMap.mdb"
-    folder_path = r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\Country"
+    env.workspace = r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\Country2\EmotionMap.mdb"
+    folder_path = r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\Country2"
     while True:
         try:
+            print index
+            '''
             pt_shp = folder_path + r"\face{0}.shp".format(index)
-            Add_xy_point(folder_path + r"\face{0}.txt".format(index), pt_shp)
-
+            Add_xy_point(folder_path + r"\facept{0}.txt".format(index), pt_shp)
+            '''
             country_shp = folder_path + r"\ne_10m_admin_0_countries.shp"
+            '''
             spatial_join_class = r"face{0}_intersect".format(index)
             Spatial_join(pt_shp, country_shp, spatial_join_class, "INTERSECT")
 
             Select_feature("face{0}_intersect".format(index), "face{0}_select".format(index), '[ADMIN] IS Null')
-
-            Spatial_join("face{0}_select".format(index), country_shp, "face{0}_select_intersect".format(index),
-                         "CLOSEST")
-
+            '''
+            #Spatial_join("face{0}_select".format(index), country_shp, "face{0}_select_intersect".format(index),
+                         #"CLOSEST")
+            '''
             layer = Join_field("face{0}_intersect".format(index), "face{0}_select_intersect".format(index))
             Update_field(layer)
             Remove_field(layer)
 
             Delete_file()
 
-            Write_csv(folder_path + r"\face{0}.csv".format(index))
+            '''
+            #Write_csv(folder_path + r"\face_s_{0}.csv".format(index))
+            Find_near_feature(r"{0}\face{1}_select".format(env.workspace,index),country_shp)
+            arcpy.Near_analysis(r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\Country\EmotionMap.mdb\face{0}_select".format(index),
+                                r"D:\Users\KYH\Documents\ArcGIS\EmotionMap\Country\ne_10m_admin_0_countries.shp")
 
             index = index + 1
             if index > end:
@@ -151,7 +163,7 @@ if __name__ == '__main__':
         except Exception as e:
             with open('log.txt', 'a') as log:
                 log.writelines("{0},{1}".format(index, e))
+                index = index + 1
         finally:
-            index = index + 1
             if index > end:
                 break

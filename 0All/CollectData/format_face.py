@@ -24,9 +24,9 @@ def format_file(old_file, new_file):
             for line in face_file:
                 line = line.split('\n')[0]
                 title, tag, description = three_word(line.split('\t')[4], line.split('\t')[5], line.split('\t')[6])
-                face_data = "{0},\'{1}\',\'{2}\',{3},{4},{5},{6}," \
-                            "{7},{8},{9},\'{10}\',{11},{12},{13},{14},{15},{16}," \
-                            "{17},{18},{19},{20},{21},{22},{23},{24},{25}\n" \
+                face_data = "{0}\t\'{1}\'\t\'{2}\'\t{3}\t{4}\t{5}\t{6}\t" \
+                            "{7}\t{8}\t{9}\t\'{10}\'\t{11}\t{12}\t{13}\t{14}\t{15}\t{16}\t" \
+                            "{17}\t{18}\t{19}\t{20}\t{21}\t{22}\t{23}\t{24}\t{25}\n" \
                     .format(line.split('\t')[0],
                             line.split('\t')[1], line.split('\t')[2],
                             line.split('\t')[3], title, tag, description,
@@ -48,7 +48,7 @@ def format_file(old_file, new_file):
 
 
 if __name__ == '__main__':
-    start = 3
+    start =1
     end = 135
     for i in range(start, end):
         print(i)

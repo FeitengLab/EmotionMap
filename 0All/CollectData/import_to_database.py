@@ -45,7 +45,7 @@ class CloudDatabase(object):
                 count = 1
                 while line:
                     # 构造SQL语句
-                    # line = line.replace('\t', ',')
+                    line = line.replace('\t', ',')
                     sql_command += "{0}),(".format(line.split('\n')[0])
                     # 如果是10000的倍数则提交
                     if count % 10000 == 0:
@@ -119,8 +119,8 @@ if __name__ == '__main__':
         database.db_connect()
         # 创建照片表
         # start指的是从第几个数据库表开始end表示的是第几个数据库表结束
-        start = 1
-        end = 134
+        start =1
+        end = 135
         database.create_table(start, end)
         # 导入csv数据
         database.import_csv2db(r"D:\Users\KYH\Desktop\EmotionMap\FlickrEmotionData\5face_format", start, end)
