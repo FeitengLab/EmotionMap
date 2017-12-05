@@ -100,6 +100,8 @@ format_face.py:将所有数据格式标准化从而可以导入数据库中
 
 import_to_database.py:将所有的人脸数据导入本地数据库中
 
+execute_sql.py:放在云端运行相应的SQL语句
+
 ### HCHO
 贾清源有关获取情绪数据、写入数据库的代码方法文件  
 emotion4.01.py
@@ -112,7 +114,7 @@ emotion4.02.py
 ## 1SiteRanking
 A Ranking of Tourist Attractions based on the Facial Expressions.
 ### Data Collection
-
+search_sites.html: 导入csv文件，包括景点的名称，返回景点的经纬度、类型、评分。
 #### get_flickr_photos
 
 ##### get_flickr_photos.py
