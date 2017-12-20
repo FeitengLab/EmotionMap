@@ -25,7 +25,8 @@ class flickr_photo(object):
             db_connection.commit()
             return True
         except Exception as e:
-            print(e)
+            with open('log.txt','a') as log:
+                log.writelines(e)
             db_connection.rollback()
             return False
 
@@ -39,7 +40,8 @@ def db_connect():
         print("Database Connection has been opened completely!")
         return connection, cursor
     except Exception as e:
-        print(e)
+        with open('log.txt','a') as log:
+            log.writelines(e)
 
 
 # 查询需要挖掘数据的地点
@@ -89,7 +91,8 @@ def get_photo_from_location(db_connection, db_cursor, site, latitude, longitude,
         photos = flickr.walk(lat=latitude, lon=longitude, radius=3,
                              min_taken_date=datemin, max_taken_date=datemax, per_page=500, extras='url_c')
     except Exception as e:
-        print(e)
+        with open('log.txt','a') as log:
+            log.writelines(e)
     # 获取每一张图片
     try:
         for photo_url in photos:
@@ -101,7 +104,8 @@ def get_photo_from_location(db_connection, db_cursor, site, latitude, longitude,
                 if photo.insert_db(db_connection, db_cursor):
                     print("Success! Photo id:" + str(photo_id) + "\tPhoto url:" + url)
     except Exception as e:
-        print(e)
+        with open('log.txt','a') as log:
+            log.writelines(e)
 
 
 # 关闭数据库
@@ -111,15 +115,18 @@ def close_connection(connection):
         print("Database Connection has been closed completely!")
         return True
     except Exception as e:
-        print(e)
+        with open('log.txt','a') as log:
+            log.writelines(e)
 
 
 # 主操作步骤
 if __name__ == '__main__':
     db_connection, db_cursor = db_connect()
-    site, lat, lon= query_site(db_connection, db_cursor)
-    if site is not None:
-        compute_time(db_connection, db_cursor, site, lat, lon)
-        close_connection(db_connection, site)
-    else:
-        print("All sites have been recorded!")
+    while(True):
+        site, lat, lon= query_site(db_connection, db_cursor)
+        if site is not None:
+            compute_time(db_connection, db_cursor, site, lat, lon)
+            close_connection(db_connection, site)
+        else:
+            print("All sites have been recorded!")
+            break
