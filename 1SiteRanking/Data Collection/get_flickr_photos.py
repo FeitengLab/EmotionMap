@@ -5,6 +5,7 @@
 import flickrapi
 import datetime
 import psycopg2
+import time
 
 
 # flickr照片类
@@ -88,6 +89,7 @@ def get_photo_from_location(db_connection, db_cursor, site, latitude, longitude,
     flickr = flickrAPI()
     # 获取所有图片
     try:
+        time.sleep(2)
         photos = flickr.walk(lat=latitude, lon=longitude, radius=3,
                              min_taken_date=datemin, max_taken_date=datemax, per_page=500, extras='url_c')
     except Exception as e:
