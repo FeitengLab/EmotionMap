@@ -24,6 +24,8 @@
 
       var map;
       var infowindow;
+	  var Index=0;
+	  var Location="";
 
       function initMap() {
         var pyrmont = {lat: -33.867, lng: 151.195};
@@ -46,6 +48,7 @@
           center: pyrmont,
           zoom: 15
         });
+		Location=location;
         infowindow = new google.maps.InfoWindow();
         var service = new google.maps.places.PlacesService(map);
         service.textSearch({
@@ -53,6 +56,10 @@
         }, callbackSearch);
       }
 	  
+	  function sleep(d){
+		for(var t = Date.now();Date.now() - t <= d;);
+}
+
 	  function callbackSearch(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           for (var i = 0; i < results.length; i++) {
@@ -61,15 +68,40 @@
 			lon=results[i].geometry.location.lng();
 			address=results[i]["formatted_address"];
 			type=results[i]["types"];
-			show_text=lat+"\t"+lon+"\t"+address+"\t"+type+"\n";
+			show_text=lat+"&"+lon+"&"+address+"&"+type+"&"+Location;
 			document.getElementById('contentFinal').textContent+=show_text;
           }
+		  	Index++;
+			sleep(500);
+			searchMap(allPts[Index]);
         }
       }
 	  
 	  function btnclicktest(){
-		searchMap("Nagashima Spa Land, Japan");
+			searchMap(allPts[Index]);
 	  }
+	  
+	//读取txt文档	
+	var textResult="";
+	var allPts=[];
+	function txtShowTest(){
+		var file=document.getElementById("file").files[0];
+		if(file){
+			var reader=new FileReader();
+			reader.onload=function(e){
+				var con=document.getElementById("contentText");
+				con.innerHTML=e.target.result;
+				textResult=e.target.result;
+				var textSplit=textResult.split("\n");
+				
+				//提取出每一个点的信息,包括id,lat,lon,region
+				for(var i=0;i<textSplit.length;i++){
+					allPts.push(textSplit[i]);
+				}
+			}
+		}
+		reader.readAsText(file);
+	}
     </script>
   </head>
   <body>
@@ -78,7 +110,7 @@
 	<button id="btn" onclick="btnclicktest()">Start!</button>
 	<p>文本文件：<input type="file" name="file" id='file' onchange='txtShowTest()'/></p>
 	<p id='contentText'></p>
-	<p>公交结果：</p>
+	<p>结果：</p>
 	<p id='contentFinal'></p>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoyhIjgkAVHfBQpjUTEWqiIdL-iF81hQc&libraries=places&callback=initMap" async defer></script>
   </body>
