@@ -26,7 +26,7 @@ class flickr_photo(object):
             return True
         except Exception as e:
             with open('log.txt','a') as log:
-                log.writelines(e)
+                log.writelines(str(e))
             db_connection.rollback()
             return False
 
@@ -41,7 +41,7 @@ def db_connect():
         return connection, cursor
     except Exception as e:
         with open('log.txt','a') as log:
-            log.writelines(e)
+            log.writelines(str(e))
 
 
 # 查询需要挖掘数据的地点
@@ -92,7 +92,7 @@ def get_photo_from_location(db_connection, db_cursor, site, latitude, longitude,
                              min_taken_date=datemin, max_taken_date=datemax, per_page=500, extras='url_c')
     except Exception as e:
         with open('log.txt','a') as log:
-            log.writelines(e)
+            log.writelines(str(e))
     # 获取每一张图片
     try:
         for photo_url in photos:
@@ -105,7 +105,7 @@ def get_photo_from_location(db_connection, db_cursor, site, latitude, longitude,
                     print("Success! Photo id:" + str(photo_id) + "\tPhoto url:" + url)
     except Exception as e:
         with open('log.txt','a') as log:
-            log.writelines(e)
+            log.writelines(str(e))
 
 
 # 关闭数据库
@@ -116,7 +116,7 @@ def close_connection(connection):
         return True
     except Exception as e:
         with open('log.txt','a') as log:
-            log.writelines(e)
+            log.writelines(str(e))
 
 
 # 主操作步骤
