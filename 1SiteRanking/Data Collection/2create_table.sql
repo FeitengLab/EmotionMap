@@ -1,6 +1,6 @@
 ﻿﻿CREATE TABLE site
 (id INTEGER PRIMARY KEY,
-site_name CHARACTER VARYING(30) NOT NULL,
+site_name CHARACTER VARYING(100) NOT NULL,
 lat FLOAT NOT NULL,
 lon FLOAT NOT NULL,
 start_query BOOLEAN NOT NULL DEFAULT(FALSE)
@@ -13,9 +13,9 @@ CREATE TABLE photo
 url TEXT NOT NULL,
 owner CHARACTER VARYING (30),
 owner_location CHARACTER VARYING (30),
-site CHARACTER VARYING(30) NOT NULL,
-lat FLOAT NOT NULL,
-lon FLOAT NOT NULL,
+site CHARACTER VARYING(100) NOT NULL,
+lat FLOAT,
+lon FLOAT,
 photo_take_date DATE,
 photo_upload BIGINT,
 accuracy INTEGER,
@@ -33,6 +33,13 @@ CREATE INDEX photo_f_hasface_index ON photo(f_hasface);
 CREATE INDEX photo_start_detect_index ON photo(start_detect);
 CREATE INDEX photo_start_info_index ON photo(start_info);
 CREATE INDEX photo_start_recog_index ON photo(start_recog);
+
+ALTER TABLE photo ADD neighbourhood TEXT;
+ALTER TABLE photo ADD locality TEXT;
+ALTER TABLE photo ADD county TEXT;
+ALTER TABLE photo ADD region TEXT;
+ALTER TABLE photo ADD country TEXT;
+ALTER TABLE photo DROP owner_location;
 
 CREATE TABLE facepp
 (id BIGINT PRIMARY KEY,

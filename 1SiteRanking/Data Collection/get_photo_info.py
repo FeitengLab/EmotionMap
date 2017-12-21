@@ -3,7 +3,6 @@
 # author:kyh
 
 import flickrapi
-import requests
 import psycopg2
 import json
 import time
@@ -11,7 +10,8 @@ import time
 
 # 图片经纬度信息类
 class photo_coordinates():
-    def __init__(self, photo_id, photo_owner, photo_post_date, photo_take_date, photo_lat, photo_lon, photo_accuracy):
+    def __init__(self, photo_id, photo_owner, photo_post_date, photo_take_date, photo_lat, photo_lon, photo_accuracy,
+                 neighbourhood, locality, county, region, country, geotag):
         self.photo_id = photo_id
         self.photo_owner = photo_owner
         self.photo_upload = photo_post_date
@@ -19,13 +19,23 @@ class photo_coordinates():
         self.photo_lat = photo_lat
         self.photo_lon = photo_lon
         self.photo_accuracy = photo_accuracy
+        self.neighbourhood = neighbourhood
+        self.locality = locality
+        self.county = county
+        self.country = country
+        self.region = region
+        self.geotag = geotag
 
     # 输入经纬度等信息
     def input_coordinates(self, connection, cursor):
         try:
-            sql_command_update = "UPDATE photo SET owner='{0}',photo_upload={1},photo_take_date='{2}',coordinates=POINT({3},{4}),accuracy={5} WHERE id={6}".format(
+            sql_command_update = "UPDATE photo SET owner='{0}',photo_upload={1},photo_take_date='{2}'," \
+                                 "lat={3},lon={4},accuracy={5},neighbourhood='{6}'," \
+                                 "locality='{7}',county='{8}',country='{9}',region='{10}'," \
+                                 "geotag='{11}' WHERE id={12}".format(
                 self.photo_owner, self.photo_upload, self.photo_take_date, self.photo_lat, self.photo_lon,
-                self.photo_accuracy, self.photo_id)
+                self.photo_accuracy, self.neighbourhood, self.locality, self.county,
+                self.country, self.region, self.geotag, self.photo_id)
             cursor.execute(sql_command_update)
             connection.commit()
             print("Success Input Coordinates!")
@@ -107,33 +117,35 @@ def get_photo_coordinates(connection, cursor, photo_id):
     except:
         photo_accuracy = ""
     try:
-        neighbourhood = photo_info["photo"]["location"]["neighbourhood"]
+        neighbourhood = photo_info["photo"]["location"]["neighbourhood"]["_content"]
     except:
         neighbourhood = ""
     try:
-        locality = photo_info["photo"]["location"]["locality"]
+        locality = photo_info["photo"]["location"]["locality"]["_content"]
     except:
         locality = ""
     try:
-        county = photo_info["photo"]["location"]["county"]
+        county = photo_info["photo"]["location"]["county"]["_content"]
     except:
         county = ""
     try:
-        region = photo_info["photo"]["location"]["region"]
+        region = photo_info["photo"]["location"]["region"]["_content"]
     except:
         region = ""
     try:
-        country = photo_info["photo"]["location"]["country"]
+        country = photo_info["photo"]["location"]["country"]["_content"]
     except:
         country = ""
     try:
+        geotag = ""
         for tag in photo_info["photo"]["tags"]["tag"]:
-            geotag = geotag + "{0};".format(tag["raw"])
+            tag_raw = tag['raw']
+            geotag = "{0}{1};".format(str(geotag), str(tag_raw))
     except:
         geotag = ""
     # 将信息录入数据库
     coordinates = photo_coordinates(photo_id, photo_owner, photo_post_date, photo_take_date, photo_lat, photo_lon,
-                                    photo_accuracy)
+                                    photo_accuracy, neighbourhood, locality, county, region, country, geotag)
     return coordinates.input_coordinates(connection, cursor)
 
 
