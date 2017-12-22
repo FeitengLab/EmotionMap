@@ -41,6 +41,9 @@ ALTER TABLE photo ADD region TEXT;
 ALTER TABLE photo ADD country TEXT;
 ALTER TABLE photo DROP owner_location;
 
+ALTER TABLE photo ADD emotion json;
+ALTER TABLE photo ADD facenum INTEGER;
+
 CREATE TABLE facepp
 (id BIGINT PRIMARY KEY,
 photo_id BIGINT NULL,
