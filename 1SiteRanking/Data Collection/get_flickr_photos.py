@@ -35,7 +35,7 @@ class flickr_photo(object):
 # 连接数据库
 def db_connect():
     try:
-        connection = psycopg2.connect(database="EmotionMap", user="postgres",
+        connection = psycopg2.connect(database="EmotionMap3", user="postgres",
                                       password="postgres", host="127.0.0.1", port="5432")
         cursor = connection.cursor()
         print("Database Connection has been opened completely!")
@@ -89,8 +89,8 @@ def get_photo_from_location(db_connection, db_cursor, site, latitude, longitude,
     flickr = flickrAPI()
     # 获取所有图片
     try:
-        time.sleep(2)
-        photos = flickr.walk(lat=latitude, lon=longitude, radius=3,
+        time.sleep(3)
+        photos = flickr.walk(lat=latitude, lon=longitude, radius=1,
                              min_taken_date=datemin, max_taken_date=datemax, per_page=500, extras='url_c')
     except Exception as e:
         with open('log.txt','a') as log:

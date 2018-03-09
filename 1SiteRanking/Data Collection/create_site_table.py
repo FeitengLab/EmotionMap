@@ -50,9 +50,9 @@ class CloudDatabase(object):
 if __name__ == '__main__':
     try:
         # 连接本地数据库
-        database = CloudDatabase("EmotionMap", "postgres", "postgres", "127.0.0.1")
+        database = CloudDatabase("EmotionMap3", "postgres", "postgres", "127.0.0.1")
         database.db_connect()
-        database.import_site(r'D:\Users\KYH\Desktop\EmotionMap\RankingSites\site_info.txt')
+        database.import_site(r'site_info.txt')
     except Exception as e:
         with open("log.txt", 'a') as log_file:
             log_file.writelines(str(e))
