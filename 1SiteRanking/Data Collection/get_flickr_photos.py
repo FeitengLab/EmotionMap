@@ -80,6 +80,7 @@ def compute_time(db_connection, db_cursor, site, latitude, longitude):
         datemin ="{0}-{1}-{2}".format(DATE.year,DATE.month,DATE.day)
         datemax ="{0}-{1}-{2}".format(DATE2.year,DATE2.month,DATE2.day)
         DATE=DATE+datetime.timedelta(days=10)
+        #print(datemin,datemax)
         get_photo_from_location(db_connection, db_cursor, site, latitude, longitude, datemin, datemax)
         if DATE.year==2017 and DATE.month==12:
             break
@@ -128,7 +129,7 @@ if __name__ == '__main__':
         site, lat, lon= query_site(db_connection, db_cursor)
         if site is not None:
             compute_time(db_connection, db_cursor, site, lat, lon)
-            close_connection(db_connection, site)
         else:
             print("All sites have been recorded!")
             break
+    close_connection(db_connection)
