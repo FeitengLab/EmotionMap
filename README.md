@@ -114,16 +114,13 @@ emotion4.02.py
 ## 1SiteRanking
 A Ranking of Tourist Attractions based on the Facial Expressions.
 ### Data Collection
-search_sites.html: 导入csv文件，包括景点的名称，返回景点的经纬度、类型、评分。
-#### get_flickr_photos
+search_sites.html: 导入csv文件，包括景点的名称，返回景点的经纬度、类型、评分。 
 
-##### get_flickr_photos.py
-用于获取Flickr照片
+get_flickr_photos.py: 获取Flickr照片  
 
-### Emotion Detection
-### Spatial Analysis
+get_photo_info.py: 获取Flickr照片的信息
 
-
+DetectEmotion.py: 探测照片的情绪
 
 ## 2StockEmotion
 Mapping the Sensitivity of the Public Emotion to the Movement of Stock Market Value.

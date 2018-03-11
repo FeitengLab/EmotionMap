@@ -33,6 +33,7 @@ CREATE INDEX photo_f_hasface_index ON photo(f_hasface);
 CREATE INDEX photo_start_detect_index ON photo(start_detect);
 CREATE INDEX photo_start_info_index ON photo(start_info);
 CREATE INDEX photo_start_recog_index ON photo(start_recog);
+CREATE INDEX photo_facenum_index ON photo(facenum);
 
 ALTER TABLE photo ADD neighbourhood TEXT;
 ALTER TABLE photo ADD locality TEXT;
@@ -43,6 +44,7 @@ ALTER TABLE photo DROP owner_location;
 
 ALTER TABLE photo ADD emotion json;
 ALTER TABLE photo ADD facenum INTEGER;
+ALTER TABLE photo DROP f_hasface;
 
 CREATE TABLE facepp
 (id BIGINT PRIMARY KEY,
