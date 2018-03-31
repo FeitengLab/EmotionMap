@@ -25,7 +25,7 @@ postgres=#
 $ psql -U postgres DBNAME
 ```
 #### 离开数据库
-请注意，Postgresql 的特殊命令都是以**\\**开头的
+请注意，Postgresql 的特殊命令都是以 **\\** 开头的
 ```sql
 psql=# \q
 ```
@@ -54,16 +54,16 @@ psql=# \d+ TABLENAME
 ```
 #### 查看某数据库占用存储大小
 ```sql
-psql=# select pg_size_pretty(pg_database_size('dbname'));
+psql=# select pg_size_pretty(pg_database_size('DBNAME'));
 ```
 #### 导出数据库
-命名随意选择，选这个后缀是为了便于标识
+命名随意选择，选这个后缀是为了便于标识。另外由于权限问题，推荐保存在 `/tmp` 下。 
 ```sql
-$ pg_dump dbname > /tmp/dbname.postgresql
+$ pg_dump DBNAME > /tmp/DBNAME.postgresql
 ```
-#### Windwos下从文本恢复数据库，通常需要先创建一个空数据库dbname，然后
+#### Windwos下从文本恢复数据库，通常需要先创建一个空数据库DBNAME，然后
 ```bat
-$ psql -U postgres dbname < the\path\to\your\backupfile
+$ psql -U postgres DBNAME < the\path\to\your\backupfile
 ```
 #### 创建NoSQL扩展：
 ```sql
@@ -97,7 +97,7 @@ psql=# SHOW version();
 ```
 E'\t'
 ```
-#### 计算运行某条语句用时：
+#### 给某条语句的运行计时：
 ```
 psql=# \timing [on|off]
 ```
