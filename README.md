@@ -146,3 +146,7 @@ Mapping the Sensitivity of the Public Emotion to the Movement of Stock Market Va
 将人脸数据与国家相关联
 #### datashader_plot.ipynb
 使用 datashader 来画数据量极大的点
+#### export_YFCCextended.zip
+快速导出成果表
+#### send_mail.py
+快速发送QQ邮件
