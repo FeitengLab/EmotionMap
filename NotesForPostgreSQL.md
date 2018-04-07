@@ -1,4 +1,4 @@
-## Postgresql 速查、备忘手册
+## PostgreSQL 速查、备忘手册
 这是一个你可能需要的一个备忘手册，此手册方便你快速查询到你需要的*常见功能*。有时也有一些曾经被使用过的高级功能。如无特殊说明，此手册仅适用于 Linux 下（但是许多也都可以在 Windows 下的 psql 命令窗运行），部分功能可能需要你的软件版本不能太低。  
 **欢迎添加你认为有价值的备忘！**
 
@@ -29,7 +29,7 @@ Windows下打开 psql 命令窗两种常用方法：
 $ psql -U postgres DBNAME
 ```
 #### 离开数据库
-请注意，Postgresql 的特殊命令都是以 **\\** 开头的
+请注意，Postgresql 的特殊命令都是以 **\\** 开头的，而且结尾不需要分号`;`
 ```sql
 psql=# \q
 ```
@@ -43,6 +43,10 @@ $ psql DBNAME # DBNAME 是你要进去的数据库名称
 ```sql
 psql=# \list or \l
 ```
+显示每个数据库的额外信息，后面的 `+` 对 下面的 `\d, \dt` 也都适用，都是提供数据库占用之类的额外信息。
+```sql
+psql=# \l+
+```
 #### 查看当前数据库所有table
 ```sql
 psql=# \dt
@@ -54,12 +58,24 @@ psql=# \d
 ```
 #### 查看某个表的所有字段
 ```sql
-psql=# \d+ TABLENAME
+psql=# \d TABLENAME
 ```
 #### 查看某数据库占用存储大小
 ```sql
-psql=# select pg_size_pretty(pg_database_size('DBNAME'));
+psql=# SELECT pg_size_pretty(pg_database_size('DBNAME'));
 ```
+#### 执行任意 SQL 语句
+首先作为关系型数据库，基本的 SQL 语言是必须要支持的。我假设你对此有所了解，当然你不需要对此精通。有一些 SQL 的基本规则你需要在这里格外注意，稍有不慎就可能会导致错误，可能很简单的错误就会打击你的积极性。
+##### SQL 语句中双引号和单引号的使用：
+* 双引号`"`用来表示的表名，但是一般我们在使用中将__双引号省略__
+* 单引号`'`用来表示普通字符串
+以下两个命令是等价的：
+```sql
+psql # SELECT FIELDNAME FROM TABLENAME WHERE FIELDNAME='normalstring';
+psel # SELECT "FIELDNAME"  FROM "TABLENAME" WHERE "FIELDNAME"='normalstring';
+```
+##### SQL 语句必须以 __`;`__ 结尾
+
 #### 导出数据库
 命名随意选择，选这个后缀是为了便于标识。另外由于权限问题，推荐保存在 `/tmp` 下。 Windows 下也会出现写文件权限问题，有不同的解决办法，比如修改用户权限等问题，但是这个涉及到用户权限设置等，个人不建议修改。建议自己尝试一下，如果失败，是不是有中文（或其他非ASCII）路径，其次是否是在你的用户路径或者是否在系统路径下。
 ```bash
@@ -86,7 +102,7 @@ psql=# copy [TABLENAME|(query)] to 'FILEPATH' with delimiter '|'
 $ echo ~postgres
 ```
 #### 将指定表到处至压缩文件
-这个要求你的系统安装有 `zip` 。当然极少有 Linux 没有这个软件。
+这个要求你的系统安装有 `zip` 。当然极少有 Linux 没有这个软件。Windows 如果自己有安装，命令行可以调用的话也可以用，否则就当我什么都没说。
 ```bash
 $ psql -c "copy public.TABLENAME to stdout with delimiter '' csv header"  DATABASE | zip > TABLENAME.zip
 ```
