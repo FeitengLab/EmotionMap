@@ -4,3 +4,5 @@
 *.mat
 2StockEmotion/.ipynb_checkpoints
 .idea/
+
+0All/CollectData/__pycache__
