@@ -1,7 +1,3 @@
-## batch_rename.py
-
-文件重命名
-
 ## DBSCANjar.py
 
 DBSCAN使用脚本。
