@@ -26,7 +26,12 @@ for i in range(1,filenum+1):
     time.sleep(5)  #根据情况调整时间
     
     #会在Output文件夹下得到最优的exampleData.json和一份lambdaTestResult.csv
-    os.rename('Output/exampleData.json','Output/result{0}.json'.format(i))  
+    while(True):
+        if(os.path.exists('Output/exampleData.json')):
+            os.rename('Output/exampleData.json','Output/result{0}.json'.format(i))  
+            break
+        else:
+            time.sleep(10)
     
     lambdaTest=open('Output/lambdaTestResult.csv','r')
     Lambda=[]
