@@ -1,5 +1,5 @@
 ## PostgreSQL 速查、备忘手册
-这是一个你可能需要的一个备忘手册，此手册方便你快速查询到你需要的*常见功能*。有时也有一些曾经被使用过的高级功能。如无特殊说明，此手册仅适用于 Linux 下（但是许多也都可以在 Windows 下的 psql 命令窗运行），部分功能可能需要你的软件版本不能太低。  
+这是一个你可能需要的一个备忘手册，此手册方便你快速查询到你需要的*常见功能*。有时也有一些曾经被使用过的高级功能。如无特殊说明，此手册仅适用于 Linux 下（基本都可以愉快运行，一般也都可以在 Windows 下的 psql 命令窗运行，只是稍微麻烦一点），部分功能可能需要你的软件版本不能太低。  
 **欢迎添加你认为有价值的备忘！**
 
 #### 切换到 postgres 账户
@@ -23,11 +23,12 @@ postgres=#
 #### Windows下使用 psql
 Windows下打开 psql 命令窗两种常用方法：
 
-* 打开你的 pgadmin 软件图形界面，在菜单栏找到 `插件 > PSQL Console`
-* 不想开 pgadmin 的话，找到 psql.exe 所在目录，在此目录打开cmd，运行：
+* 打开你的 pgadmin 软件图形界面，鼠标在左侧对象浏览器选中你要进入的数据库，在菜单栏找到 `插件 > PSQL Console`
+* 不想开 pgadmin 的话，找到 psql.exe 所在目录（实例：`C:\Program Files (x86)\PostgreSQL\9.x\bin`），在此目录打开cmd（一些其他的程序如`pg_dump`等也都在这个目录），运行：
 ```bat
 $ psql -U postgres DBNAME
 ```
+Windows 注意：很多时候你运行 psql 出错是因为没有输入正确的用户名参数，例如用户名`-U postgres`等。
 #### 离开数据库
 请注意，Postgresql 的特殊命令都是以 **\\** 开头的，而且结尾不需要分号`;`
 ```sql
@@ -101,7 +102,11 @@ psql=# create extension hstore
 ```sql
 psql=# \! dir
 ```
-
+有了这个的帮助，你在 Windows 下，需要运行 `psql.exe` 或者其他程序，就不需要费周章去找到其具体目录了，你可以从 pgadmin 的 [PSQL console](#windows-psql) 来运行一些命令了。例如：
+```sql
+psql=# \! psql -c "SHOW version()" -U postgres  -- 显示软件版本
+```
+值得一提的是，这种使用方案并不算好用，因为 Windows 命令行奇怪的编码，以及如果软件在你电脑上自动安装成了中文，一旦输入了错误指令，报错会用中文报错，报错的内容可能就会乱码。
 #### 查看postgres用户的目录
 ```sh
 $ echo ~postgres
