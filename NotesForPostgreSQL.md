@@ -127,6 +127,11 @@ psql=# copy TABLENAME(FIELD1, FILED2) to 'FILEPATH' with delimiter '|'; -- 指�
 psql=# copy (query) to 'FILEPATH' with delimiter '|'; -- 使用 query
 ```
 
+#### 导出为json格式的文件
+```
+psql=# copy (select ROW_TO_JSON(t) from (select * from TABLENAME) t) to 'FILEPATH';
+```
+
 #### 在命令中表示TAB键
 到处为 csv 的时候你可能需要用到
 ```
