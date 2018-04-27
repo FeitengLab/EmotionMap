@@ -162,3 +162,8 @@ psql=# \timing [on|off]
 ```sql
 psql=# EXPLAIN [SQL query]
 ```
+#### 查看服务运行状态
+`pg_lsclusters` 可以用来显示当前数据库服务运行状态，可以查看服务是否开启，以及 _log文件的位置_ ，这个在你的数据库无法开启时可能是你需要的（运行`less LOG_PATH`查看log)。 然后针对你碰到的错误使用搜索引擎，你碰到过的问题，其他人基本都碰到过。
+```sh
+$ pg_lsclusters
+```
