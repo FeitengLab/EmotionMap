@@ -167,3 +167,8 @@ psql=# EXPLAIN [SQL query]
 ```sh
 $ pg_lsclusters
 ```
+#### 快速查询表的（估计）行数
+通常当表变得非常大时（千万条数据级以上），数据库没有优化的话，查询速度变得相当缓慢。使用以下命令可以瞬间查找到记录的大致数值。(Ref: [SO](https://stackoverflow.com/a/7945274))
+```sh
+psql=# SELECT reltuples::bigint AS estimate FROM pg_class where relname='TABLENAME';
+```
