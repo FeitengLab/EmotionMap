@@ -4,5 +4,7 @@
 *.mat
 2StockEmotion/.ipynb_checkpoints
 .idea/
+nohup.out
+log.txt
 
 0All/CollectData/__pycache__
